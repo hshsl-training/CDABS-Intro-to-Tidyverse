@@ -1,6 +1,7 @@
 ---
-title: "Class Title Here"
-author: "Amy Yarnell, Author2, Author3"
+title: "Data Wrangling and Visualization in R"
+subtitle: "An Introduction to the Tidyverse"
+author: "Amy Yarnell"
 title-block-banner: white
 title-block-banner-color: black
 navbar:

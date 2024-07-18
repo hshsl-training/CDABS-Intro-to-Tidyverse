@@ -1,19 +1,37 @@
 project:
   type: website
-
+  render:
+  - "index.qmd"
+  - "*.qmd"
+  
 website:
-  title: "tidyverse_workshop_summer2024"
+  title: "CDABS Data Wrangling and Visualization in R"
+  page-footer: "This material is shared under a [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) license."
+  repo-url: "https://github.com/hshsl-training/tidyverse-workshop-summer2024.git"
+  repo-actions: [edit, issue]
   navbar:
+    background: primary
+    search: true
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - text: "Home"
+        file: index.qmd
+      - text: Data Wrangling
+        file: 01-DataWrangling.qmd
+     # - sidebar:sidebar id - repeat as needed for sidebar entries
+    
+
+  #sidebar:
+   # - id: sidebar id from above
+     # title: "Human readable sidebar section name name"
+     # style: "docked"
+     # background: light
+     # collapse-level: 2
+     # contents:
+     # - "file path, repeat as needed"
+      
 
 format:
   html:
-    theme: cosmo
-    css: styles.css
+    theme: yeti
+    editor: source
     toc: true
-
-editor: source
-
