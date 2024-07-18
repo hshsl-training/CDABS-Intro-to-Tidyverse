@@ -1,1 +1,12 @@
 /* css styles */
+.quarto-title-block .quarto-title-banner {
+  padding-left: 15px;
+  padding-top: 60px;
+  background-origin: content-box;
+  
+}
+
+.scrolling {
+  max-height: 400px;
+  overflow-y: auto;
+}

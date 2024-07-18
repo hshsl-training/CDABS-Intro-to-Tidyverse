@@ -1,11 +1,32 @@
 ---
-title: "tidyverse_workshop_summer2024"
+title: "Class Title Here"
+author: "Amy Yarnell, Author2, Author3"
+title-block-banner: white
+title-block-banner-color: black
+navbar:
+    page-navigation: true
+format: 
+  html:
+    embed-resources: true
+toc: true
+editor: source
+css: styles.css
 ---
 
-This is a Quarto website.
+## Course Description: 
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
 
-```{r}
-1 + 1
-```
+
+**Schedule**
+
+| Date | Topic                     |
+|------|---------------------------|
+| TBD  | TBD |
+| TBD  | TBD  |
+
+
+## Acknowledgements
+
+
+## License
+This material is shared under a [CC-BY    4.0](https://creativecommons.org/licenses/by/4.0/) license.
