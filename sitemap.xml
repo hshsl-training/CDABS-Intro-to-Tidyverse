@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://hshsl-training.github.io/tidyverse-workshop-summer2024/about.html</loc>
+    <lastmod>2024-07-18T00:09:13.799Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hshsl-training.github.io/tidyverse-workshop-summer2024/01-DataWrangling.html</loc>
+    <lastmod>2024-07-18T00:10:29.298Z</lastmod>
+  </url>
+  <url>
     <loc>https://hshsl-training.github.io/tidyverse-workshop-summer2024/index.html</loc>
-    <lastmod>2024-07-18T00:09:14.093Z</lastmod>
+    <lastmod>2024-07-18T00:20:25.589Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hshsl-training.github.io/tidyverse-workshop-summer2024/02-DataVisualization.html</loc>
+    <lastmod>2024-07-18T00:09:13.784Z</lastmod>
   </url>
 </urlset>
