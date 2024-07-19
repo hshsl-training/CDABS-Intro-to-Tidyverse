@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -107,7 +141,23 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#getting-set-up" id="toc-getting-set-up" class="nav-link active" data-scroll-target="#getting-set-up">Getting set up</a></li>
+  <li><a href="#why-data-visualization" id="toc-why-data-visualization" class="nav-link" data-scroll-target="#why-data-visualization">Why Data Visualization?</a></li>
+  <li><a href="#visualizing-data-with-ggplot2" id="toc-visualizing-data-with-ggplot2" class="nav-link" data-scroll-target="#visualizing-data-with-ggplot2">Visualizing Data with ggplot2</a>
+  <ul class="collapse">
+  <li><a href="#setting-vs-mapping-aesthetics" id="toc-setting-vs-mapping-aesthetics" class="nav-link" data-scroll-target="#setting-vs-mapping-aesthetics">Setting vs mapping aesthetics</a></li>
+  <li><a href="#working-with-color-palettes" id="toc-working-with-color-palettes" class="nav-link" data-scroll-target="#working-with-color-palettes">Working with color palettes</a></li>
+  <li><a href="#changing-the-theme" id="toc-changing-the-theme" class="nav-link" data-scroll-target="#changing-the-theme">Changing the theme</a></li>
+  </ul></li>
+  <li><a href="#faceting-and-small-multiples" id="toc-faceting-and-small-multiples" class="nav-link" data-scroll-target="#faceting-and-small-multiples">Faceting and Small Multiples</a></li>
+  <li><a href="#maps" id="toc-maps" class="nav-link" data-scroll-target="#maps">Maps</a></li>
+  <li><a href="#next-steps-from-beginnr-to-practitionr" id="toc-next-steps-from-beginnr-to-practitionr" class="nav-link" data-scroll-target="#next-steps-from-beginnr-to-practitionr">Next Steps: From BeginnR to PractitionR</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/edit/main/02-DataVisualization.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -131,179 +181,633 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- ## Visualizing Data with ggplot2 -->
-<!-- Next, we will learn about **`ggplot2`** - a tidyverse package for visualizing data. It is a powerful and flexible tool that allows you to create fully customizable, publication quality graphics. The gg in **`ggplot2`** stands for grammar of graphics. The grammar of graphics is the underlying philosophy of the package. It focuses on creating graphics in layers. Start with the data – map the data the axes and to aesthetic qualities like size, shape, and color and geometries like dots, lines, and polygons. Further refine the appearance of your plot by adjusting scales and legends, labels, coordinate systems, and adding annotations. -->
-<!-- All `ggplot2` graphs start with the same basic template: -->
-<!-- ``` -->
-<!-- <DATA> %>% -->
-<!--     ggplot(aes(<MAPPINGS>)) + -->
-<!--     <GEOM_FUNCTION>() + -->
-<!--     <Additional GEOMS, SCALES, THEMES, etc. . . > -->
-<!-- ``` -->
-<!-- All graphs start with the ggplot function and the data. We’ll use the pipe to pipe the data to the function. -->
-<!-- ```{r} -->
-<!-- bene_mutate %>%  -->
-<!--   ggplot() -->
-<!-- ``` -->
-<!-- We see that even this initializes the plot area of RStudio. -->
-<!-- Next, we define a mapping (using the aesthetic, or `aes()`, function), by selecting the variables to be plotted and specifying how to present them in the graph, e.g. as x/y positions or characteristics such as size, shape, color, etc. Here we will say that the x axis should contain the affiliation variable. Note how the x-axis populates with some numbers and tick marks.  -->
-<!-- ```{r} -->
-<!-- bene_mutate %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD)) -->
-<!-- ``` -->
-<!-- Next we need to add `‘geoms’` – graphical representations of the data in the plot (points, lines, bars). **`ggplot2`** offers many different geoms for common graph types. To add a geom to the plot use the `+` operator.  -->
-<!-- ```{r} -->
-<!-- bene_mutate %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD)) + -->
-<!--            geom_bar() -->
-<!-- ``` -->
-<!-- If you want the y axis to display something other than count, you need to make a couple of small adjustments. First - specify the `y` variable in the `aes()` function, and change the stat argument from it’s default of “count” to “identity” This tells it to base the y axis on the specified variable. -->
-<!-- ```{r} -->
-<!-- bene_one_group %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb)) + -->
-<!--            geom_bar(stat = "identity") -->
-<!-- ``` -->
-<!-- ### Setting vs mapping aesthetics -->
-<!-- When working with **`ggplot2`**, it's important to understand the difference between *setting* aesthetic properties and *mapping* them. All geoms have certain visual attributes that can be modified. Polygons like bars, have the properties fill and color. You can change the inside color of a bar with `fill`, and the border with `color`. We can modify the defaults with the `fill` and `color` arguments in the `geom_bar()` layer. (I've also increased the `linewidth` to make it easier to see the border color) -->
-<!-- ```{r} -->
-<!-- bene_one_group %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb)) + -->
-<!--            geom_bar(stat = "identity",  -->
-<!--                     fill="blue",  -->
-<!--                     color="purple",  -->
-<!--                     linewidth=1.5, -->
-<!--                     width = 0.8) + -->
-<!--   theme_minimal() -->
-<!-- ``` -->
-<!-- ::: {.callout-note} -->
-<!-- How did we know the color names "blue" and "purple" would work in the code above? R has 657 (!!) built in color names. You can see them by calling the function `colors()`. You can also specify colors using rgb and hexadecimal codes.  -->
-<!-- ::: -->
-<!-- Now we have manually set a value for the fill and color. To create our initial graph, we used the `mapping` argument and the `aes()` function to map the x axis to the `BENE_RACE_CD` variable. Watch what happens if we map the fill property to the `BENE_RACE_CD` variable as well. -->
-<!-- ```{r} -->
-<!-- bene_one_group %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_RACE_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge") -->
-<!-- ``` -->
-<!-- ### Building a grouped bar chart -->
-<!-- Mapping a variable to an aesthetic is especially useful when we have third variable we want to express on our graph. For example, what if we want to compare mean inpatient reimbursement by both race and sex? To do this we can create a grouped bar chart by mapping `fill` to the `BENE_SEX_IDENT_CD` variable.  -->
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity") -->
-<!-- ``` -->
-<!-- ::: {.callout-note} -->
-<!-- When you map an aesthetic with `aes()` in the `ggplot()` function it is inherited by all subsequent layers. When you map in a `geom_*()` function it is applied only to that layer.  -->
-<!-- ::: -->
-<!-- BY default this creates a stacked bar chart. To make it grouped, we add a `position="dodged"` argument to `geom_bar()` -->
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge") -->
-<!-- ``` -->
-<!-- To make our graph look less crowded, we can also modify the width of the bars. Note this is done outside of the `aes()` function. -->
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge", width=0.75) -->
-<!-- ``` -->
-<!-- ### Adding titles and axis labels -->
-<!-- A good plot communicates clearly. So far we've talked about achieving this through the aesthetic aspects of your plot, but it's important to make sure your graph has a clear title and axis labels as well. There are a few ways to do this in **`ggplot2`**, but one of the simplest is to use the `labs()` function.  -->
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge", width=0.75) + -->
-<!--   labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF", -->
-<!--        subtitle = "By Race and Sex", -->
-<!--        x = "Race", -->
-<!--        y = "Mean reimbursement amount") -->
-<!-- ``` -->
-<!-- We can also change the labels of the tick marks and the legend with the `scale_*` family of functions. Choose the right function by looking for the one with the appropriate axis and data type. This function has a `labels = ` argument that takes a character vector of label names. So we'll choose  -->
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge", width=0.75) + -->
-<!--   labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF", -->
-<!--        subtitle = "By Race and Sex", -->
-<!--        x = "Race", -->
-<!--        y = "Mean reimbursement amount") + -->
-<!--   scale_x_discrete(labels=c("White", "Black", "Others", "Hispanic")) + -->
-<!--   scale_fill_discrete(name = "Sex", labels=c("Male", "Female")) -->
-<!-- ``` -->
-<!-- ### Working with color palettes -->
-<!-- While **`ggplot`** comes with a default color palette, there are numerous other palettes out there you can use, such as: -->
-<!-- - [**`RColorBrewer`**](https://r-graph-gallery.com/38-rcolorbrewers-palettes.html) -->
-<!-- - [**`viridis`**](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html) -->
-<!-- - [**`ggthemes`**](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/) -->
-<!-- - [**`ggsci`**](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html) -->
-<!-- - [**`wesanderson`**](https://github.com/karthik/wesanderson#readme) -->
-<!-- Let’s try applying a viridis palette. viridis was designed to be especially robust for many forms of color-blindness. It is also meant to print well in grey scale. As an additional advantage, a lightweight form of the package is included with ggplot2, so there is no need to install additional packages. -->
-<!-- To do this, we need to change our function `scale_fill_discrete()` to `scale_viridis_d()` -->
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge", width=0.75) + -->
-<!--   labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF", -->
-<!--        subtitle = "By Race and Sex", -->
-<!--        x = "Race", -->
-<!--        y = "Mean reimbursement amount") + -->
-<!--   scale_x_discrete(labels=c("White", "Black", "Others", "Hispanic")) + -->
-<!--   scale_fill_viridis_d(name = "Sex", labels=c("Male", "Female")) -->
-<!-- ``` -->
-<!-- Learn more from the [**`viridis`** documentation](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales) -->
-<!-- ### Changing the theme -->
-<!-- The theme of a **`ggplot2`** graph controls the overall look and all non-data elements of the plot. There are several built-in themes which can be applied as another layer. Start typing `theme_` in RStudio to see a list of themes. You can also use the `theme()` function to modify aspects of an existing theme. Here we apply `theme_classic()` which removes the grid lines and grey background of the default theme. -->
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge", width=0.75) + -->
-<!--   labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF", -->
-<!--        subtitle = "By Race and Sex", -->
-<!--        x = "Race", -->
-<!--        y = "Mean reimbursement amount") + -->
-<!--   scale_x_discrete(labels=c("White", "Black", "Others", "Hispanic")) + -->
-<!--   scale_fill_viridis_d(name = "Sex", labels=c("Male", "Female")) + -->
-<!--   theme_classic() -->
-<!-- ``` -->
-<!-- ## Joining datasets -->
-<!-- DE-SynPUF data is divided into multiple tables, and so far we've only worked with one. All the tables are linked by a variable called `DESYNPUF_ID`. This variable allows a researcher to track an individual through the different files. In this lesson, we'll learn how to join these files so you can combine demographic data with clinical data about visits and prescription drugs use.  -->
-<!-- One way of combining tables is through concatenation. This would be appropriate for the three beneficiary summary files which each contain the same variables, but for different years. -->
-<!-- First, we need to import the remaining two summary files. Let's also import the inpatient sample file. We'll work with that next. -->
-<!-- ```{r} -->
-<!-- bene_2009 <- read_csv("data/DE1_0_2009_Beneficiary_Summary_File_Sample_1.csv") -->
-<!-- bene_2010 <- read_csv("data/DE1_0_2010_Beneficiary_Summary_File_Sample_1.csv") -->
-<!-- bene_ip <- read_csv("data/DE1_0_2008_to_2010_Inpatient_Claims_Sample_1.csv") -->
-<!-- ``` -->
-<!-- To concatenate files, we use the function `bind_rows()`. This takes the names of data frames we want to join as arguments. There is also an optional argument `.id=` which creates a column to identify which data frame the row came from. -->
-<!-- ```{r} -->
-<!-- bene_all <- bind_rows(bene_2008, bene_2009, bene_2010, .id = "File") -->
-<!-- ``` -->
-<!-- To combine a summary file with a file like the inpatient sample, we would use a **join** to match rows based on the `DESYNPUF_ID`. There are different join functions available, based on what you are trying to accomplish. These terms may be familiar if you've ever worked with SQL and relational databases: -->
-<!-- - An `inner_join()`: keeps only the observations from data frame `x` that have a matching key in data frame `y` -->
-<!-- - A `left_join()` keeps all observations in `x`. -->
-<!-- - A `right_join()` keeps all observations in `y`. -->
-<!-- - A `full_join()` keeps all observations in `x` and `y`. -->
-<!-- Here, we will use an inner join, and keep only the observations (rows) from the 2010 beneficiary summary that are present in the inpatient sample file. That is, if a beneficiary did not file any inpatient claims, they would not be present in our resulting table. -->
-<!-- Let's first trim our `bene_2010` data frame to just a few variables, and then use the `inner_join()` function to link it to the `bene_ip` data frame. We'll use the `by = ` argument to name the variable (column) to join on. The name of the variable must be a string in this argument (indicated by putting it in quotes). -->
-<!-- ```{r} -->
-<!-- bene_ip_join <- bene_2010 %>%  -->
-<!--   filter(SP_CHF == 1) %>%  -->
-<!--   select(DESYNPUF_ID,  -->
-<!--          BENE_BIRTH_DT,  -->
-<!--          BENE_DEATH_DT,  -->
-<!--          BENE_SEX_IDENT_CD,  -->
-<!--          BENE_RACE_CD) %>%  -->
-<!--   inner_join(bene_ip, by = "DESYNPUF_ID") -->
-<!-- ``` -->
-<!-- ## Next Steps: From BeginnR to PractitionR -->
-<!-- I hope you enjoyed this very brief introduction to R. You may be wondering - where do you go from here? -->
-<!-- There are tons of R classes and tutorials on the internet, but the best way to learn R is to use it! I recommend picking a data set and just playing around. There's no harm in making mistakes along the way. It's much easier to find a useful tutorial if you look for ones that teach a specific task you want to accomplish.  -->
-<!-- Also, check out these helpful resources: -->
-<!-- 1. [R for Data Science](https://r4ds.hadley.nz/), by Hadley Wickham -->
-<!-- 1. [Tidyverse documentation](https://www.tidyverse.org/) -->
-<!-- 1. [R Graph Gallery](https://r-graph-gallery.com/) -->
-<!-- 1. [R Graphics Cookbook](https://r-graphics.org/) -->
+<section id="getting-set-up" class="level2">
+<h2 class="anchored" data-anchor-id="getting-set-up">Getting set up</h2>
+<ol type="1">
+<li>Sign in to RStudio Cloud (Or, if you haven’t already, sign up for a free account at RStudio Cloud https://rstudio.cloud/plans/free)</li>
+<li>Go to the RStudio Cloud class project for this session <replace link=""></replace></li>
+<li>Note the text that marks this as a Temporary Copy. Select the <code>Save a Permanent Copy</code> button to begin working!</li>
+<li>Open the script called <code>02-DataVisualization.R</code></li>
+<li>Use the <code>library()</code> function to load the <code>tidyverse</code></li>
+<li>Use the <code>read_csv()</code>function to import the the <code>yearly_rates_joined</code> and <code>region_summary</code> csv files.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyverse' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tibble' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyr' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'readr' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'purrr' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'stringr' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'forcats' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lubridate' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>yearly_rates_joined <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/yearly_rates_joined.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 4055 Columns: 7
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (3): State, division, region
+dbl (4): Year, TotalCount, pop1000, epi_rate
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>region_summary <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/region_summary.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 4 Columns: 2
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (1): region
+dbl (1): avg_rate
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+</section>
+<section id="why-data-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="why-data-visualization">Why Data Visualization?</h2>
+<p>Visualization is an important process which can help us explore, understand, analyze, and communicate about data. Visualizations, including many kinds of graphs, charts, maps, animations, and infographics, can be far more effective at quickly communicating important points than raw numbers alone. But visualizations also have the power to mislead. And so throughout this class, we’ll be covering some good data visualization practices. Slides accompanying this section can be found here: https://osf.io/yk5bx^[Slides created by the [Visualizing the Future project] (https://visualizingthefuture.github.io/), made possible in part by the Institute of Museum and Library Services, RE-73-18-0059-18.</p>
+</section>
+<section id="visualizing-data-with-ggplot2" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-data-with-ggplot2">Visualizing Data with ggplot2</h2>
+<p>Next, we will learn about <strong><code>ggplot2</code></strong> - a tidyverse package for visualizing data. It is a powerful and flexible tool that allows you to create fully customizable, publication quality graphics. The gg in <strong><code>ggplot2</code></strong> stands for grammar of graphics. The grammar of graphics is the underlying philosophy of the package. It focuses on creating graphics in layers. Start with the data – map the data the axes and to aesthetic qualities like size, shape, and color and geometries like dots, lines, and polygons. Further refine the appearance of your plot by adjusting scales and legends, labels, coordinate systems, and adding annotations.</p>
+<p>All <code>ggplot2</code> graphs start with the same basic template:</p>
+<pre><code>&lt;DATA&gt; %&gt;%
+    ggplot(aes(&lt;MAPPINGS&gt;)) +
+    &lt;GEOM_FUNCTION&gt;() +
+    &lt;Additional GEOMS, SCALES, THEMES, etc. . . &gt;
+</code></pre>
+<p>All graphs start with the ggplot function and the data. We’ll use the pipe to pipe the data to the function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>region_summary <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We see that even this initializes the plot area of RStudio.</p>
+<p>Next, we define a mapping (using the aesthetic, or <code>aes()</code>, function), by selecting the variables to be plotted and specifying how to present them in the graph, e.g.&nbsp;as x/y positions or characteristics such as size, shape, color, etc. Here we will say that the x axis should contain the affiliation variable. Note how the x-axis populates with some numbers and tick marks.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>region_summary <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>region, <span class="at">y=</span>avg_rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Next we need to add <code>‘geoms’</code> – graphical representations of the data in the plot (points, lines, bars). <strong><code>ggplot2</code></strong> offers many different geoms for common graph types. To add a geom to the plot use the <code>+</code> operator.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>region_summary <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>region, <span class="at">y=</span>avg_rate)) <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If you want the y axis to display something other than count, you need to make a couple of small adjustments. First - specify the <code>y</code> variable in the <code>aes()</code> function, and change the stat argument from it’s default of “count” to “identity” This tells it to base the y axis on the specified variable.</p>
+<section id="setting-vs-mapping-aesthetics" class="level3">
+<h3 class="anchored" data-anchor-id="setting-vs-mapping-aesthetics">Setting vs mapping aesthetics</h3>
+<p>When working with <strong><code>ggplot2</code></strong>, it’s important to understand the difference between <em>setting</em> aesthetic properties and <em>mapping</em> them. All geoms have certain visual attributes that can be modified. Polygons like bars, have the properties fill and color. You can change the inside color of a bar with <code>fill</code>, and the border with <code>color</code>. We can modify the defaults with the <code>fill</code> and <code>color</code> arguments in the <code>geom_bar()</code> layer. (I’ve also increased the <code>linewidth</code> to make it easier to see the border color)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>region_summary <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>region, <span class="at">y=</span>avg_rate)) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">fill=</span><span class="st">"blue"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">color=</span><span class="st">"purple"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">linewidth=</span><span class="fl">1.5</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">width =</span> <span class="fl">0.8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>How did we know the color names “blue” and “purple” would work in the code above? R has 657 (!!) built in color names. You can see them by calling the function <code>colors()</code>. You can also specify colors using rgb and hexadecimal codes.</p>
+</div>
+</div>
+<p>Now we have manually set a value for the fill and color. To create our initial graph, we used the <code>mapping</code> argument and the <code>aes()</code> function to map the x axis to the <code>BENE_RACE_CD</code> variable. Watch what happens if we map the fill property to the <code>BENE_RACE_CD</code> variable as well.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>region_summary <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>region, <span class="at">y=</span>avg_rate, <span class="at">fill=</span>region)) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As we’ll see later in this lesson, mapping a variable to an aesthetic will be especially helpful when we have a third variable to display.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When you map an aesthetic with <code>aes()</code> in the <code>ggplot()</code> function it is inherited by all subsequent layers. When you map in a <code>geom_*()</code> function it is applied only to that layer.</p>
+</div>
+</div>
+<p>Now let’s start using ggplot2 to help us answer our research question - how did the introduction of the vaccine affect measles rates in the country? We’ll do this with a line graph, which is useful for showing change over time.</p>
+<p>First, we need to use our <code>**dplyr**</code> skills to summarize the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">TotalCount =</span> <span class="fu">sum</span>(TotalCount))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 96 × 2
+    Year TotalCount
+   &lt;dbl&gt;      &lt;dbl&gt;
+ 1  1906       2345
+ 2  1907      40199
+ 3  1908      54471
+ 4  1909      49802
+ 5  1910      86984
+ 6  1911      59171
+ 7  1912      64773
+ 8  1913     111431
+ 9  1914      56440
+10  1915      93579
+# ℹ 86 more rows</code></pre>
+</div>
+</div>
+<p>We pipe to <code>ggplot()</code> and assign <code>Year</code> to the x-axis and <code>TotalCount</code> to the y-axis with the <code>aes()</code> function. The canvas and axes are ready.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">TotalCount =</span> <span class="fu">sum</span>(TotalCount)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>TotalCount))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we can add a <code>geom</code> layer to add our line. Let’s also be sure to save our work to an object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>year_total_line <span class="ot">&lt;-</span> yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">TotalCount =</span> <span class="fu">sum</span>(TotalCount)) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>TotalCount)) <span class="sc">+</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>year_total_line</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It might be nice to see where each data point falls on the line. To do this we can add another geometry layer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>year_total_line <span class="ot">&lt;-</span> yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">TotalCount =</span> <span class="fu">sum</span>(TotalCount)) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>TotalCount)) <span class="sc">+</span> </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>year_total_line</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="shaded tip">
+<p>The <code>+</code> in the <strong><code>ggplot2</code></strong> package is particularly useful because it allows you to modify existing <code>ggplot</code> objects. This means you can easily set up plot templates and conveniently explore different types of plots, so the above plot can also be generated with code like this:</p>
+<p><code>year_total_line &lt;- year_total_line + geom_point()</code></p>
+</div>
+<p>There are many ways to customize your plot, like changing the color or line type, adding labels and annotations. One thing that would make our graph easier to read is tick marks at each decade on the x-axis. There are a number of functions in <strong><code>ggplot2</code></strong> for altering the scale. We want to alter the x-axis scale, which holds continuous data, so we can use the <code>scale_x_continuous()</code> function. Note that when you start to write the name of the function, RStudio will supply you with other similarly named functions.</p>
+<p><code>scale_x_continuous()</code> has an argument called <code>breaks</code> which allows you to alter where the axis tick marks occur. We can use that together with <code>seq()</code> to say put a tick mark every 10 places between 1900 and 2000.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>year_total_line <span class="ot">&lt;-</span> yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">TotalCount =</span> <span class="fu">sum</span>(TotalCount)) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>TotalCount)) <span class="sc">+</span> </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="dv">1900</span>, <span class="at">to=</span><span class="dv">2000</span>, <span class="at">by=</span><span class="dv">10</span>))</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>year_total_line</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we can move beyond basic exploration and start to use our graph to analyze and tell stories about our data. One important trend we might notice, is the sharp decrease in cases in the 1960s. The measles vaccine was introduced in 1963. We can use our visualization to tell the story of the vaccine’s impact.</p>
+<p>Let’s drop a reference line at 1963 to clearly indicate on the graph when the vaccine was introduced. To do this we add a <code>geom_vline()</code> and the <code>annotate()</code> function. There are multiple ways of adding lines and text to a plot, but these will serve us well for this case. Note that you can change features of lines such as color, type, and size. We can supply coordinates to <code>annotate()</code> to position the annotation where we want.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>year_total_line <span class="ot">&lt;-</span> yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">TotalCount =</span> <span class="fu">sum</span>(TotalCount)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>TotalCount)) <span class="sc">+</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="dv">1900</span>, <span class="at">to=</span><span class="dv">2000</span>, <span class="at">by=</span><span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1963</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype=</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"label"</span>, <span class="at">x=</span><span class="dv">1963</span>, <span class="at">y=</span><span class="dv">800000</span>, <span class="at">label=</span><span class="st">"1963: vaccine introduced"</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>year_total_line</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, let’s add a title and axis labels to our plot with the <code>labs()</code> function. Note that axis labels will automatically be supplied from the column names, but you can use this function to override those defaults.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>year_total_line <span class="ot">&lt;-</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">TotalCount =</span> <span class="fu">sum</span>(TotalCount)) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>TotalCount)) <span class="sc">+</span> </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="dv">1900</span>, <span class="at">to=</span><span class="dv">2000</span>, <span class="at">by=</span><span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1963</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype=</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"label"</span>, <span class="at">x=</span><span class="dv">1963</span>, <span class="at">y=</span><span class="dv">800000</span>, <span class="at">label=</span><span class="st">"1963: vaccine introduced"</span>) <span class="sc">+</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Measles Cases Decrease After Vaccine Introduced"</span>, <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Total Measles Case Count"</span>)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>year_total_line</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now, we have a pretty nice looking graph. Finally, let’s save our plot to a png file, so we can share it or put it in reports. To do this we use the function called <code>ggsave()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/yearly_measles_count.png"</span>, <span class="at">plot =</span> year_total_line)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year, region) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">TotalCount =</span> <span class="fu">sum</span>(TotalCount)) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>TotalCount, <span class="at">group=</span>region, <span class="at">color=</span>region)) <span class="sc">+</span> </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="dv">1900</span>, <span class="at">to=</span><span class="dv">2000</span>, <span class="at">by=</span><span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1963</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype=</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"label"</span>, <span class="at">x=</span><span class="dv">1963</span>, <span class="at">y=</span><span class="dv">800000</span>, <span class="at">label=</span><span class="st">"1963: vaccine introduced"</span>) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Measles Cases Decrease After Vaccine Introduced"</span>, <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Total Measles Case Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Year'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="working-with-color-palettes" class="level3">
+<h3 class="anchored" data-anchor-id="working-with-color-palettes">Working with color palettes</h3>
+<p>While <strong><code>ggplot</code></strong> comes with a default color palette, there are numerous other palettes out there you can use, such as:</p>
+<ul>
+<li><a href="https://r-graph-gallery.com/38-rcolorbrewers-palettes.html"><strong><code>RColorBrewer</code></strong></a></li>
+<li><a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html"><strong><code>viridis</code></strong></a></li>
+<li><a href="https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/"><strong><code>ggthemes</code></strong></a></li>
+<li><a href="https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html"><strong><code>ggsci</code></strong></a></li>
+<li><a href="https://github.com/karthik/wesanderson#readme"><strong><code>wesanderson</code></strong></a></li>
+</ul>
+<p>Let’s try applying a viridis palette. viridis was designed to be especially robust for many forms of color-blindness. It is also meant to print well in grey scale. As an additional advantage, a lightweight form of the package is included with ggplot2, so there is no need to install additional packages.</p>
+<p>To do this, we need to change our function <code>scale_fill_discrete()</code> to <code>scale_viridis_d()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year, region) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">TotalCount =</span> <span class="fu">sum</span>(TotalCount)) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>TotalCount, <span class="at">group=</span>region, <span class="at">color=</span>region)) <span class="sc">+</span> </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="dv">1900</span>, <span class="at">to=</span><span class="dv">2000</span>, <span class="at">by=</span><span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1963</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype=</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"label"</span>, <span class="at">x=</span><span class="dv">1963</span>, <span class="at">y=</span><span class="dv">400000</span>, <span class="at">label=</span><span class="st">"1963: vaccine introduced"</span>) <span class="sc">+</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Measles Cases Decrease After Vaccine Introduced"</span>, <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Total Measles Case Count"</span>) <span class="sc">+</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Year'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Learn more from the <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales"><strong><code>viridis</code></strong> documentation</a></p>
+</section>
+<section id="changing-the-theme" class="level3">
+<h3 class="anchored" data-anchor-id="changing-the-theme">Changing the theme</h3>
+<p>The theme of a <strong><code>ggplot2</code></strong> graph controls the overall look and all non-data elements of the plot. There are several built-in themes which can be applied as another layer. Start typing <code>theme_</code> in RStudio to see a list of themes. You can also use the <code>theme()</code> function to modify aspects of an existing theme. Here we apply <code>theme_classic()</code> which removes the grid lines and grey background of the default theme.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year, region) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_rate =</span> <span class="fu">mean</span>(epi_rate)) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>avg_rate, <span class="at">group=</span>region, <span class="at">color=</span>region)) <span class="sc">+</span> </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="dv">1900</span>, <span class="at">to=</span><span class="dv">2000</span>, <span class="at">by=</span><span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1963</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype=</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"label"</span>, <span class="at">x=</span><span class="dv">1963</span>, <span class="at">y=</span><span class="dv">8000</span>, <span class="at">label=</span><span class="st">"1963: vaccine introduced"</span>) <span class="sc">+</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Measles Cases Decrease After Vaccine Introduced"</span>, <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Total Measles Case Count"</span>) <span class="sc">+</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>() <span class="sc">+</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Year'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="faceting-and-small-multiples" class="level2">
+<h2 class="anchored" data-anchor-id="faceting-and-small-multiples">Faceting and Small Multiples</h2>
+<p>It can be difficult to understand a graph with too much data. Even just five lines</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year, region) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_rate =</span> <span class="fu">mean</span>(epi_rate)) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>avg_rate, <span class="at">group=</span>region, <span class="at">color=</span>region)) <span class="sc">+</span> </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="dv">1900</span>, <span class="at">to=</span><span class="dv">2000</span>, <span class="at">by=</span><span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1963</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype=</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"label"</span>, <span class="at">x=</span><span class="dv">1963</span>, <span class="at">y=</span><span class="dv">8000</span>, <span class="at">label=</span><span class="st">"1963: vaccine introduced"</span>) <span class="sc">+</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Measles Cases Decrease After Vaccine Introduced"</span>, <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Total Measles Case Count"</span>) <span class="sc">+</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>() <span class="sc">+</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>region, <span class="at">nrow=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Year'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(Year, region) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summarize</span>(<span class="at">avg_rate =</span> <span class="fu">mean</span>(epi_rate)) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">region2=</span>region) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="sc">-</span>region)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Year'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+</div>
+<p>We could also use highlighting to do away with noise in a line graph. First create a new data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>regional_rates <span class="ot">&lt;-</span> yearly_rates_joined <span class="sc">%&gt;%</span> <span class="fu">filter</span>(division<span class="sc">==</span><span class="st">"South Atlantic"</span> <span class="sc">&amp;</span> <span class="fu">between</span>(Year, <span class="dv">1950</span>, <span class="dv">1980</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we can create two <code>geom_line</code> layers and highlight just the one in the facet.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> regional_rates <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">State2=</span>State)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>tmp <span class="sc">%&gt;%</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>epi_rate)) <span class="sc">+</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data=</span>tmp <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>State), <span class="fu">aes</span>(<span class="at">group=</span>State2), <span class="at">color=</span><span class="st">"grey"</span>, <span class="at">linewidth=</span><span class="fl">0.5</span>, <span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">color=</span>state), <span class="at">color=</span><span class="st">"#69b3a2"</span>, <span class="at">linewidth=</span><span class="fl">1.2</span> ) <span class="sc">+</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="at">from=</span><span class="dv">1950</span>, <span class="at">to=</span><span class="dv">1980</span>, <span class="at">by=</span><span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position=</span><span class="st">"none"</span>,</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>),</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"A comparison of measles cases in the South Atlantic Region"</span>) <span class="sc">+</span></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>State, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="maps" class="level2">
+<h2 class="anchored" data-anchor-id="maps">Maps</h2>
+<p>While we were successful at creating a bar chart to compare measles rates in each state, it is often more helpful to use a map to visualize geographic data. There are multiple types of map-based visualizations in R and tools for creating them. While it is possible to make interactive and animated maps in R, in this lesson, we will only cover static maps.</p>
+<p>In this lesson, we will focus on creating <strong>choropleths</strong>. Despite the funny name, this is a visualization you have likely seen many many times. A choropleth is a map that links geographic areas or boundaries to some numeric variable.</p>
+<p><strong><code>ggplot2</code></strong> needs a little help to make map visualizations. Depending on the geographies you want to map, you may need to find geoJSON or shapefiles. There are also several packages in R that come pre-loaded with background maps of common geographies. We’ll be using one in this lesson called <strong><code>usmap</code></strong>. There are several advantages to this package:</p>
+<ol type="1">
+<li>It contains maps of the US with both state and county boundaries.</li>
+<li>You can create maps based on census regions and divisions. 3. Alaska and Hawaii are included, while many map packages only have a map of the continental US.</li>
+<li>It creates the map as a <strong><code>ggplot2</code></strong> object, so you can customize the visualization with <strong><code>ggplot2</code></strong> functions (i.e.&nbsp;the things you’ve been learning in this lesson!)</li>
+</ol>
+<p>We’ve installed <strong><code>usmap</code></strong> in your RStudio Cloud project, so now let’s load it into our session.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usmap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'usmap' was built under R version 4.3.3</code></pre>
+</div>
+</div>
+<p>The main function in this package is <code>plot_usmap</code>. When you call it without any arguments, you get the background map of the US.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_usmap</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>By default it shows state boundaries, but we could also ask it to show county boundaries</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_usmap</span>(<span class="at">regions=</span><span class="st">"counties"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Since we do not have that level of data in our dataset, we’ll use the default option. There are two required arguments to <code>plot_usmap()</code>.</p>
+<ol type="1">
+<li>The first is a data frame specified with the <code>data</code> argument. This data frame must have a column called <code>state</code> or <code>fips</code> which contains state names or FIPS (Federal Information Processing) codes. FIPS codes must be used for county level data. This data frame must also have a column of values for each state or FIPS.</li>
+<li>The second argument is the name of the column that contains the values, specified by the <code>value</code> argument.</li>
+</ol>
+<p>Let’s first create a data frame with just our 1963 data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>measles1963df <span class="ot">&lt;-</span> yearly_rates_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year<span class="sc">==</span><span class="dv">1963</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rename</span>(<span class="at">state=</span>State)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s plot our data with <code>plot_usmap()</code>. Remember it’s important to use rate here rather than our raw count numbers since we are dealing with areas of vastly different populations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_usmap</span>(<span class="at">data=</span>measles1963df, <span class="at">values =</span> <span class="st">"epi_rate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We are provided with a default color scheme, but we can adjust this. Before we do though, it’s worth talking a little about some considerations for using color in visualizations. Color can make a huge difference to the effectiveness of your visualization, and it’s important to think carefully about your choices. For example, in our default color palette, many of the shades are pretty dark, and it is hard to visually distinguish among them. When choosing a palette, you want to be sure shades can be easily distinguished from one another. Also, choose palettes that are color-blind friendly and would hold up well if you visualization was printed in greyscale.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'viridis' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: viridisLite</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'viridisLite' was built under R version 4.3.3</code></pre>
+</div>
+</div>
+<p><strong><code>viridis</code></strong> is integrated with <strong><code>ggplot2</code></strong>, and our map is a <code>ggplot</code> object, we can call the function <code>scale_fill_viridis</code> and add it to our plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_usmap</span>(<span class="at">data=</span>measles1963df, <span class="at">values =</span> <span class="st">"epi_rate"</span>) <span class="sc">+</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note how the brighter areas seem to highlight the areas of greater concern.</p>
+<p>If you prefer the darker colors to represent higher rates, and lighter to represent lower, we can switch the direction of the palette with the <code>direction</code> argument.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_usmap</span>(<span class="at">data=</span>measles1963df, <span class="at">values =</span> <span class="st">"epi_rate"</span>) <span class="sc">+</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis</span>(<span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s try another of the <strong><code>viridis</code></strong> palettes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_usmap</span>(<span class="at">data=</span>measles1963df, <span class="at">values =</span> <span class="st">"epi_rate"</span>) <span class="sc">+</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis</span>(<span class="at">option =</span> <span class="st">"rocket"</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-DataVisualization_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s add a title, assign to an object, and save to a png file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>map_1963 <span class="ot">&lt;-</span> <span class="fu">plot_usmap</span>(<span class="at">data=</span>measles1963df, <span class="at">values =</span> <span class="st">"epi_rate"</span>) <span class="sc">+</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis</span>(<span class="at">option =</span> <span class="st">"rocket"</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Incidence Rate of Measles per 1000 people in 1963"</span>)</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"figures/map_1963.png"</span>, <span class="at">plot =</span> map_1963, <span class="at">bg =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="next-steps-from-beginnr-to-practitionr" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps-from-beginnr-to-practitionr">Next Steps: From BeginnR to PractitionR</h2>
+<p>I hope you enjoyed this very brief introduction to R. You may be wondering - where do you go from here?</p>
+<p>There are tons of R classes and tutorials on the internet, but the best way to learn R is to use it! I recommend picking a data set and just playing around. There’s no harm in making mistakes along the way. It’s much easier to find a useful tutorial if you look for ones that teach a specific task you want to accomplish.</p>
+<p>Also, check out these helpful resources:</p>
+<ol type="1">
+<li><a href="https://r4ds.hadley.nz/">R for Data Science</a>, by Hadley Wickham</li>
+<li><a href="https://www.tidyverse.org/">Tidyverse documentation</a></li>
+<li><a href="https://r-graph-gallery.com/">R Graph Gallery</a></li>
+<li><a href="https://r-graphics.org/">R Graphics Cookbook</a></li>
+</ol>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -723,7 +1227,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
 <p>This material is shared under a <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> license.</p>
-<div class="toc-actions"><ul><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/edit/main/02-DataVisualization.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/edit/main/02-DataVisualization.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
