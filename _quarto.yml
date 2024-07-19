@@ -17,6 +17,8 @@ website:
         file: index.qmd
       - text: Data Wrangling
         file: 01-DataWrangling.qmd
+      - text: Data Visualization
+        file: 02-DataVisualization.qmd
      # - sidebar:sidebar id - repeat as needed for sidebar entries
     
 
