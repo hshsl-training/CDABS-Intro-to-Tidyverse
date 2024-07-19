@@ -1,249 +1,212 @@
 ---
 title: "Data Visualization with ggplot2"
 ---
+## Getting set up
 
-<!-- ## Visualizing Data with ggplot2 -->
+1. Sign in to RStudio Cloud (Or, if you haven't already, sign up for a free account at RStudio Cloud https://rstudio.cloud/plans/free)
+2. Go to the RStudio Cloud class project for this session REPLACE LINK
+3. Note the text that marks this as a Temporary Copy. Select the `Save a Permanent Copy` button to begin working!
+4. Create a new script called `measles_viz_script.R`
+5. Load the object in your `data` folder called `yearly_rates_ext`
 
-<!-- Next, we will learn about **`ggplot2`** - a tidyverse package for visualizing data. It is a powerful and flexible tool that allows you to create fully customizable, publication quality graphics. The gg in **`ggplot2`** stands for grammar of graphics. The grammar of graphics is the underlying philosophy of the package. It focuses on creating graphics in layers. Start with the data – map the data the axes and to aesthetic qualities like size, shape, and color and geometries like dots, lines, and polygons. Further refine the appearance of your plot by adjusting scales and legends, labels, coordinate systems, and adding annotations. -->
+## Why Data Visualization?
 
-<!-- All `ggplot2` graphs start with the same basic template: -->
+Visualization is an important process which can help us explore, understand, analyze, and communicate about data. Visualizations, including many kinds of graphs, charts, maps, animations, and infographics, can be far more effective at quickly communicating important points than raw numbers alone. But visualizations also have the power to mislead. And so throughout this class, we'll be covering some good data visualization practices. Slides accompanying this section can be found here: https://osf.io/yk5bx^[Slides created by the [Visualizing the Future project] (https://visualizingthefuture.github.io/), made possible in part by the Institute of Museum and Library Services, RE-73-18-0059-18.
 
-<!-- ``` -->
-<!-- <DATA> %>% -->
-<!--     ggplot(aes(<MAPPINGS>)) + -->
-<!--     <GEOM_FUNCTION>() + -->
-<!--     <Additional GEOMS, SCALES, THEMES, etc. . . > -->
 
-<!-- ``` -->
+## Visualizing Data with ggplot2 
 
-<!-- All graphs start with the ggplot function and the data. We’ll use the pipe to pipe the data to the function. -->
+Next, we will learn about **`ggplot2`** - a tidyverse package for visualizing data. It is a powerful and flexible tool that allows you to create fully customizable, publication quality graphics. The gg in **`ggplot2`** stands for grammar of graphics. The grammar of graphics is the underlying philosophy of the package. It focuses on creating graphics in layers. Start with the data – map the data the axes and to aesthetic qualities like size, shape, and color and geometries like dots, lines, and polygons. Further refine the appearance of your plot by adjusting scales and legends, labels, coordinate systems, and adding annotations.
 
-<!-- ```{r} -->
-<!-- bene_mutate %>%  -->
-<!--   ggplot() -->
-<!-- ``` -->
+All `ggplot2` graphs start with the same basic template:
 
-<!-- We see that even this initializes the plot area of RStudio. -->
+```
+<DATA> %>%
+    ggplot(aes(<MAPPINGS>)) +
+    <GEOM_FUNCTION>() +
+    <Additional GEOMS, SCALES, THEMES, etc. . . >
 
-<!-- Next, we define a mapping (using the aesthetic, or `aes()`, function), by selecting the variables to be plotted and specifying how to present them in the graph, e.g. as x/y positions or characteristics such as size, shape, color, etc. Here we will say that the x axis should contain the affiliation variable. Note how the x-axis populates with some numbers and tick marks.  -->
+```
 
-<!-- ```{r} -->
-<!-- bene_mutate %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD)) -->
-<!-- ``` -->
-<!-- Next we need to add `‘geoms’` – graphical representations of the data in the plot (points, lines, bars). **`ggplot2`** offers many different geoms for common graph types. To add a geom to the plot use the `+` operator.  -->
+All graphs start with the ggplot function and the data. We’ll use the pipe to pipe the data to the function.
 
-<!-- ```{r} -->
-<!-- bene_mutate %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD)) + -->
-<!--            geom_bar() -->
-<!-- ``` -->
+```{r}
+region_summary %>%
+  ggplot()
+```
 
+We see that even this initializes the plot area of RStudio.
 
-<!-- If you want the y axis to display something other than count, you need to make a couple of small adjustments. First - specify the `y` variable in the `aes()` function, and change the stat argument from it’s default of “count” to “identity” This tells it to base the y axis on the specified variable. -->
+Next, we define a mapping (using the aesthetic, or `aes()`, function), by selecting the variables to be plotted and specifying how to present them in the graph, e.g. as x/y positions or characteristics such as size, shape, color, etc. Here we will say that the x axis should contain the affiliation variable. Note how the x-axis populates with some numbers and tick marks.
 
-<!-- ```{r} -->
-<!-- bene_one_group %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb)) + -->
-<!--            geom_bar(stat = "identity") -->
-<!-- ``` -->
+```{r}
+region_summary %>%
+  ggplot(aes(x=region, y=avg_rate))
+```
 
+Next we need to add `‘geoms’` – graphical representations of the data in the plot (points, lines, bars). **`ggplot2`** offers many different geoms for common graph types. To add a geom to the plot use the `+` operator.
 
-<!-- ### Setting vs mapping aesthetics -->
-<!-- When working with **`ggplot2`**, it's important to understand the difference between *setting* aesthetic properties and *mapping* them. All geoms have certain visual attributes that can be modified. Polygons like bars, have the properties fill and color. You can change the inside color of a bar with `fill`, and the border with `color`. We can modify the defaults with the `fill` and `color` arguments in the `geom_bar()` layer. (I've also increased the `linewidth` to make it easier to see the border color) -->
+```{r}
+region_summary %>%
+  ggplot(aes(x=region, y=avg_rate)) +
+           geom_bar(stat = "identity")
+```
 
-<!-- ```{r} -->
-<!-- bene_one_group %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb)) + -->
-<!--            geom_bar(stat = "identity",  -->
-<!--                     fill="blue",  -->
-<!--                     color="purple",  -->
-<!--                     linewidth=1.5, -->
-<!--                     width = 0.8) + -->
-<!--   theme_minimal() -->
-<!-- ``` -->
-<!-- ::: {.callout-note} -->
-<!-- How did we know the color names "blue" and "purple" would work in the code above? R has 657 (!!) built in color names. You can see them by calling the function `colors()`. You can also specify colors using rgb and hexadecimal codes.  -->
-<!-- ::: -->
 
-<!-- Now we have manually set a value for the fill and color. To create our initial graph, we used the `mapping` argument and the `aes()` function to map the x axis to the `BENE_RACE_CD` variable. Watch what happens if we map the fill property to the `BENE_RACE_CD` variable as well. -->
+If you want the y axis to display something other than count, you need to make a couple of small adjustments. First - specify the `y` variable in the `aes()` function, and change the stat argument from it’s default of “count” to “identity” This tells it to base the y axis on the specified variable.
 
 
-<!-- ```{r} -->
-<!-- bene_one_group %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_RACE_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge") -->
+### Setting vs mapping aesthetics
+When working with **`ggplot2`**, it's important to understand the difference between *setting* aesthetic properties and *mapping* them. All geoms have certain visual attributes that can be modified. Polygons like bars, have the properties fill and color. You can change the inside color of a bar with `fill`, and the border with `color`. We can modify the defaults with the `fill` and `color` arguments in the `geom_bar()` layer. (I've also increased the `linewidth` to make it easier to see the border color)
 
-<!-- ``` -->
+```{r}
+region_summary %>%
+  ggplot(aes(x=region, y=avg_rate)) +
+           geom_bar(stat = "identity",
+                    fill="blue",
+                    color="purple",
+                    linewidth=1.5,
+                    width = 0.8) +
+  theme_minimal()
+```
+::: {.callout-note}
+How did we know the color names "blue" and "purple" would work in the code above? R has 657 (!!) built in color names. You can see them by calling the function `colors()`. You can also specify colors using rgb and hexadecimal codes.
+:::
 
-<!-- ### Building a grouped bar chart -->
+Now we have manually set a value for the fill and color. To create our initial graph, we used the `mapping` argument and the `aes()` function to map the x axis to the `BENE_RACE_CD` variable. Watch what happens if we map the fill property to the `BENE_RACE_CD` variable as well.
 
-<!-- Mapping a variable to an aesthetic is especially useful when we have third variable we want to express on our graph. For example, what if we want to compare mean inpatient reimbursement by both race and sex? To do this we can create a grouped bar chart by mapping `fill` to the `BENE_SEX_IDENT_CD` variable.  -->
 
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity") -->
+```{r}
+bene_one_group %>%
+  ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_RACE_CD)) +
+           geom_bar(stat = "identity", position = "dodge")
 
-<!-- ``` -->
-<!-- ::: {.callout-note} -->
-<!-- When you map an aesthetic with `aes()` in the `ggplot()` function it is inherited by all subsequent layers. When you map in a `geom_*()` function it is applied only to that layer.  -->
-<!-- ::: -->
+```
 
-<!-- BY default this creates a stacked bar chart. To make it grouped, we add a `position="dodged"` argument to `geom_bar()` -->
+### Building a grouped bar chart
 
+Mapping a variable to an aesthetic is especially useful when we have third variable we want to express on our graph. For example, what if we want to compare mean inpatient reimbursement by both race and sex? To do this we can create a grouped bar chart by mapping `fill` to the `BENE_SEX_IDENT_CD` variable.
 
+```{r}
+bene_two_groups %>%
+  ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) +
+           geom_bar(stat = "identity")
 
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge") -->
+```
+::: {.callout-note}
+When you map an aesthetic with `aes()` in the `ggplot()` function it is inherited by all subsequent layers. When you map in a `geom_*()` function it is applied only to that layer.
+:::
 
-<!-- ``` -->
+BY default this creates a stacked bar chart. To make it grouped, we add a `position="dodged"` argument to `geom_bar()`
 
-<!-- To make our graph look less crowded, we can also modify the width of the bars. Note this is done outside of the `aes()` function. -->
 
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge", width=0.75) -->
 
-<!-- ``` -->
-<!-- ### Adding titles and axis labels -->
+```{r}
+bene_two_groups %>%
+  ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) +
+           geom_bar(stat = "identity", position = "dodge")
 
-<!-- A good plot communicates clearly. So far we've talked about achieving this through the aesthetic aspects of your plot, but it's important to make sure your graph has a clear title and axis labels as well. There are a few ways to do this in **`ggplot2`**, but one of the simplest is to use the `labs()` function.  -->
+```
 
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge", width=0.75) + -->
-<!--   labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF", -->
-<!--        subtitle = "By Race and Sex", -->
-<!--        x = "Race", -->
-<!--        y = "Mean reimbursement amount") -->
+To make our graph look less crowded, we can also modify the width of the bars. Note this is done outside of the `aes()` function.
 
-<!-- ``` -->
+```{r}
+bene_two_groups %>%
+  ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) +
+           geom_bar(stat = "identity", position = "dodge", width=0.75)
 
+```
+### Adding titles and axis labels
 
-<!-- We can also change the labels of the tick marks and the legend with the `scale_*` family of functions. Choose the right function by looking for the one with the appropriate axis and data type. This function has a `labels = ` argument that takes a character vector of label names. So we'll choose  -->
+A good plot communicates clearly. So far we've talked about achieving this through the aesthetic aspects of your plot, but it's important to make sure your graph has a clear title and axis labels as well. There are a few ways to do this in **`ggplot2`**, but one of the simplest is to use the `labs()` function.
 
+```{r}
+bene_two_groups %>%
+  ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) +
+           geom_bar(stat = "identity", position = "dodge", width=0.75) +
+  labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF",
+       subtitle = "By Race and Sex",
+       x = "Race",
+       y = "Mean reimbursement amount")
 
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge", width=0.75) + -->
-<!--   labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF", -->
-<!--        subtitle = "By Race and Sex", -->
-<!--        x = "Race", -->
-<!--        y = "Mean reimbursement amount") + -->
-<!--   scale_x_discrete(labels=c("White", "Black", "Others", "Hispanic")) + -->
-<!--   scale_fill_discrete(name = "Sex", labels=c("Male", "Female")) -->
+```
 
-<!-- ``` -->
 
+We can also change the labels of the tick marks and the legend with the `scale_*` family of functions. Choose the right function by looking for the one with the appropriate axis and data type. This function has a `labels = ` argument that takes a character vector of label names. So we'll choose
 
-<!-- ### Working with color palettes -->
 
-<!-- While **`ggplot`** comes with a default color palette, there are numerous other palettes out there you can use, such as: -->
+```{r}
+bene_two_groups %>%
+  ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) +
+           geom_bar(stat = "identity", position = "dodge", width=0.75) +
+  labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF",
+       subtitle = "By Race and Sex",
+       x = "Race",
+       y = "Mean reimbursement amount") +
+  scale_x_discrete(labels=c("White", "Black", "Others", "Hispanic")) +
+  scale_fill_discrete(name = "Sex", labels=c("Male", "Female"))
 
-<!-- - [**`RColorBrewer`**](https://r-graph-gallery.com/38-rcolorbrewers-palettes.html) -->
-<!-- - [**`viridis`**](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html) -->
-<!-- - [**`ggthemes`**](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/) -->
-<!-- - [**`ggsci`**](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html) -->
-<!-- - [**`wesanderson`**](https://github.com/karthik/wesanderson#readme) -->
+```
 
-<!-- Let’s try applying a viridis palette. viridis was designed to be especially robust for many forms of color-blindness. It is also meant to print well in grey scale. As an additional advantage, a lightweight form of the package is included with ggplot2, so there is no need to install additional packages. -->
 
-<!-- To do this, we need to change our function `scale_fill_discrete()` to `scale_viridis_d()` -->
+### Working with color palettes
 
+While **`ggplot`** comes with a default color palette, there are numerous other palettes out there you can use, such as:
 
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge", width=0.75) + -->
-<!--   labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF", -->
-<!--        subtitle = "By Race and Sex", -->
-<!--        x = "Race", -->
-<!--        y = "Mean reimbursement amount") + -->
-<!--   scale_x_discrete(labels=c("White", "Black", "Others", "Hispanic")) + -->
-<!--   scale_fill_viridis_d(name = "Sex", labels=c("Male", "Female")) -->
-<!-- ``` -->
+- [**`RColorBrewer`**](https://r-graph-gallery.com/38-rcolorbrewers-palettes.html)
+- [**`viridis`**](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html)
+- [**`ggthemes`**](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)
+- [**`ggsci`**](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html)
+- [**`wesanderson`**](https://github.com/karthik/wesanderson#readme)
 
-<!-- Learn more from the [**`viridis`** documentation](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales) -->
+Let’s try applying a viridis palette. viridis was designed to be especially robust for many forms of color-blindness. It is also meant to print well in grey scale. As an additional advantage, a lightweight form of the package is included with ggplot2, so there is no need to install additional packages.
 
-<!-- ### Changing the theme -->
+To do this, we need to change our function `scale_fill_discrete()` to `scale_viridis_d()`
 
-<!-- The theme of a **`ggplot2`** graph controls the overall look and all non-data elements of the plot. There are several built-in themes which can be applied as another layer. Start typing `theme_` in RStudio to see a list of themes. You can also use the `theme()` function to modify aspects of an existing theme. Here we apply `theme_classic()` which removes the grid lines and grey background of the default theme. -->
 
-<!-- ```{r} -->
-<!-- bene_two_groups %>%  -->
-<!--   ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) + -->
-<!--            geom_bar(stat = "identity", position = "dodge", width=0.75) + -->
-<!--   labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF", -->
-<!--        subtitle = "By Race and Sex", -->
-<!--        x = "Race", -->
-<!--        y = "Mean reimbursement amount") + -->
-<!--   scale_x_discrete(labels=c("White", "Black", "Others", "Hispanic")) + -->
-<!--   scale_fill_viridis_d(name = "Sex", labels=c("Male", "Female")) + -->
-<!--   theme_classic() -->
-<!-- ``` -->
+```{r}
+bene_two_groups %>%
+  ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) +
+           geom_bar(stat = "identity", position = "dodge", width=0.75) +
+  labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF",
+       subtitle = "By Race and Sex",
+       x = "Race",
+       y = "Mean reimbursement amount") +
+  scale_x_discrete(labels=c("White", "Black", "Others", "Hispanic")) +
+  scale_fill_viridis_d(name = "Sex", labels=c("Male", "Female"))
+```
 
+Learn more from the [**`viridis`** documentation](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales)
 
-<!-- ## Joining datasets -->
+### Changing the theme
 
-<!-- DE-SynPUF data is divided into multiple tables, and so far we've only worked with one. All the tables are linked by a variable called `DESYNPUF_ID`. This variable allows a researcher to track an individual through the different files. In this lesson, we'll learn how to join these files so you can combine demographic data with clinical data about visits and prescription drugs use.  -->
+The theme of a **`ggplot2`** graph controls the overall look and all non-data elements of the plot. There are several built-in themes which can be applied as another layer. Start typing `theme_` in RStudio to see a list of themes. You can also use the `theme()` function to modify aspects of an existing theme. Here we apply `theme_classic()` which removes the grid lines and grey background of the default theme.
 
-<!-- One way of combining tables is through concatenation. This would be appropriate for the three beneficiary summary files which each contain the same variables, but for different years. -->
+```{r}
+bene_two_groups %>%
+  ggplot(aes(x=BENE_RACE_CD, y=mean_ip_reimb, fill=BENE_SEX_IDENT_CD)) +
+           geom_bar(stat = "identity", position = "dodge", width=0.75) +
+  labs(title = "Mean Inpatient annual Medicare reimbursement amount \n for patients with CHF",
+       subtitle = "By Race and Sex",
+       x = "Race",
+       y = "Mean reimbursement amount") +
+  scale_x_discrete(labels=c("White", "Black", "Others", "Hispanic")) +
+  scale_fill_viridis_d(name = "Sex", labels=c("Male", "Female")) +
+  theme_classic()
+```
 
-<!-- First, we need to import the remaining two summary files. Let's also import the inpatient sample file. We'll work with that next. -->
 
-<!-- ```{r} -->
-<!-- bene_2009 <- read_csv("data/DE1_0_2009_Beneficiary_Summary_File_Sample_1.csv") -->
 
-<!-- bene_2010 <- read_csv("data/DE1_0_2010_Beneficiary_Summary_File_Sample_1.csv") -->
 
-<!-- bene_ip <- read_csv("data/DE1_0_2008_to_2010_Inpatient_Claims_Sample_1.csv") -->
-<!-- ``` -->
+## Next Steps: From BeginnR to PractitionR
 
-<!-- To concatenate files, we use the function `bind_rows()`. This takes the names of data frames we want to join as arguments. There is also an optional argument `.id=` which creates a column to identify which data frame the row came from. -->
+I hope you enjoyed this very brief introduction to R. You may be wondering - where do you go from here?
 
-<!-- ```{r} -->
-<!-- bene_all <- bind_rows(bene_2008, bene_2009, bene_2010, .id = "File") -->
-<!-- ``` -->
+There are tons of R classes and tutorials on the internet, but the best way to learn R is to use it! I recommend picking a data set and just playing around. There's no harm in making mistakes along the way. It's much easier to find a useful tutorial if you look for ones that teach a specific task you want to accomplish.
 
+Also, check out these helpful resources:
 
-<!-- To combine a summary file with a file like the inpatient sample, we would use a **join** to match rows based on the `DESYNPUF_ID`. There are different join functions available, based on what you are trying to accomplish. These terms may be familiar if you've ever worked with SQL and relational databases: -->
-
-<!-- - An `inner_join()`: keeps only the observations from data frame `x` that have a matching key in data frame `y` -->
-<!-- - A `left_join()` keeps all observations in `x`. -->
-<!-- - A `right_join()` keeps all observations in `y`. -->
-<!-- - A `full_join()` keeps all observations in `x` and `y`. -->
-
-<!-- Here, we will use an inner join, and keep only the observations (rows) from the 2010 beneficiary summary that are present in the inpatient sample file. That is, if a beneficiary did not file any inpatient claims, they would not be present in our resulting table. -->
-
-<!-- Let's first trim our `bene_2010` data frame to just a few variables, and then use the `inner_join()` function to link it to the `bene_ip` data frame. We'll use the `by = ` argument to name the variable (column) to join on. The name of the variable must be a string in this argument (indicated by putting it in quotes). -->
-
-<!-- ```{r} -->
-<!-- bene_ip_join <- bene_2010 %>%  -->
-<!--   filter(SP_CHF == 1) %>%  -->
-<!--   select(DESYNPUF_ID,  -->
-<!--          BENE_BIRTH_DT,  -->
-<!--          BENE_DEATH_DT,  -->
-<!--          BENE_SEX_IDENT_CD,  -->
-<!--          BENE_RACE_CD) %>%  -->
-<!--   inner_join(bene_ip, by = "DESYNPUF_ID") -->
-<!-- ``` -->
-
-
-<!-- ## Next Steps: From BeginnR to PractitionR -->
-
-<!-- I hope you enjoyed this very brief introduction to R. You may be wondering - where do you go from here? -->
-
-<!-- There are tons of R classes and tutorials on the internet, but the best way to learn R is to use it! I recommend picking a data set and just playing around. There's no harm in making mistakes along the way. It's much easier to find a useful tutorial if you look for ones that teach a specific task you want to accomplish.  -->
-
-<!-- Also, check out these helpful resources: -->
-
-<!-- 1. [R for Data Science](https://r4ds.hadley.nz/), by Hadley Wickham -->
-<!-- 1. [Tidyverse documentation](https://www.tidyverse.org/) -->
-<!-- 1. [R Graph Gallery](https://r-graph-gallery.com/) -->
-<!-- 1. [R Graphics Cookbook](https://r-graphics.org/) -->
+1. [R for Data Science](https://r4ds.hadley.nz/), by Hadley Wickham
+1. [Tidyverse documentation](https://www.tidyverse.org/)
+1. [R Graph Gallery](https://r-graph-gallery.com/)
+1. [R Graphics Cookbook](https://r-graphics.org/)

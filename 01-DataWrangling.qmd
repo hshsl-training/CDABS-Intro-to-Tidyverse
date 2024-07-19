@@ -728,27 +728,23 @@ joined_df <- yearly_count_state %>%
 
 joined_df
 ```
+::: {.callout-tip title="CHALLENGE"}
+1. Use mutate() to calculate the rate of measles per 100,000 persons (remember population is given in 1000s).
 
-Now we can use our old friend `mutate()` to add a rate column calculated from the count and pop1000 columns.
+
+1. Try joining `measles_yearly_rates` to `states`. What variable do you need to join by?
+
+:::: {.callout-tip collapse=TRUE appearance="minimal"}
 
 ```{r}
-
+# 1. 
 measles_yearly_rates <-
   joined_df %>% 
-  mutate(rate = TotalCount / pop1000)
+  mutate(epi_rate = (TotalCount / pop1000)*1000)
 
-head(measles_yearly_rates)
-```
-
-::: {.callout-tip title="CHALLENGE"}
-
-Try joining `measles_yearly_rates` to `states`. What variable do you need to join by?
-
-:::: {.callout-tip collapse=TRUE appearance="minimal}
-
-```{r}
-states_join <- measles_yearly_rates %>% 
-left_join(states, by = join_by(State == name))
+# 2. 
+yearly_rates_ext <- measles_yearly_rates %>% 
+  left_join(states, by = join_by(State == name))
 ```
 
 
