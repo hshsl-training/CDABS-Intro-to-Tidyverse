@@ -743,7 +743,7 @@ measles_yearly_rates <-
   mutate(epi_rate = (TotalCount / pop1000)*1000)
 
 # 2. 
-yearly_rates_ext <- measles_yearly_rates %>% 
+yearly_rates_joined <- measles_yearly_rates %>% 
   left_join(states, by = join_by(State == name))
 ```
 
