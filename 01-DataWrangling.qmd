@@ -76,7 +76,7 @@ For this lesson we will be using data which comes from [Project Tycho](https://w
 
 Throughout this lesson, we will be using a dataset from Project Tycho featuring historical counts of measles cases in the U.S.. We want to clean and present this data in a way that makes it easy to see how measles cases fluctuated over time.
 
-A useful feature of Project Tycho data is their use of a common set of variables. Read more about their [data format]("https://www.tycho.pitt.edu/dataformat/ProjectTychoPreCompiledDataFormat.pdf").
+A useful feature of Project Tycho data is their use of a common set of variables. Read more about their [data format](https://www.tycho.pitt.edu/dataformat/ProjectTychoPreCompiledDataFormat.pdf).
 
 ## Starting out in R
 
@@ -124,9 +124,7 @@ language. You can use R without RStudio, but it’s much more limiting.
 RStudio makes it easier to import datasets, create and write scripts,
 and makes using R much more effective. RStudio is also free and open
 source. To function correctly, RStudio needs R and therefore both need
-to be installed on your computer. But for this class we'll be using a
-browser based version called RStudio Cloud (see directions in the
-\[RStudio Cloud\] section below.)
+to be installed on your computer. 
 
 RStudio is divided into four "panes". The placement of these panes and
 their content can be customized (see menu, Tools -\> Global Options -\>
@@ -146,29 +144,41 @@ The Default Layout is:
 knitr::include_graphics("images/rstudio.png")
 ```
 
-::: {.callout-tip collapse="true}
+### RStudio Projects
 
-### Posit Cloud
+RStudio provides a useful feature called `Projects` which act like a container for your work. As you use R more, you will find it useful to make sure your files and environment for one real-world project are kept together and separate from other projects. 
+
+Let's create a new project now. 
+1. Go to `File > New Project`
+2. In `Create project from` menu choose `Existing Directory`
+3. Browse to `Desktop > Session01_DataWrangling`
+4. Select the check box that says `Open in New Session`
+
+
+::: {.callout-tip appearence="minimal" collapse="true"}
+
+### Follow Along at Home
 
 Posit (RStudio) Cloud is a browser-based version of RStudio. It will
 allow you to use RStudio without needing to download anything to your
-computer. You can also easily share your R projects with others. While you will want to download R and RStudio for regular use, we will be using
-RStudio Cloud for this session so we can all work from the same environment.
+computer. Posit Cloud automatically organizes things into Projects. You can also easily share your R projects with others. 
 
 Get Started:
 
 1.  Create your free RStudio Cloud account at
     <https://rstudio.cloud/plans/free>.
-2.  Go to the class project <UPDATE LINK>
+2.  Go to the class project <https://posit.cloud/content/8458222>
 3.  Note the text that marks this as a Temporary Copy. Select the
     `Save a Permanent Copy` button to begin working!
+    
+    
 :::
 
 ## R Scripts
 
 A script is a document in which you write your code. This makes it easy to re-run that code when you need to. In addition to code, your script can also have comments, which start with a `#` symbol. These comments make your script more human readable, but are ignored by the computer. 
 
-To get started in this lesson - open up the script in your RStudio Project called `rwd_lesson.R` 
+To get started in this lesson - open up the script in your RStudio Project called `01_DataWrangling.R` 
 
 ## Welcome to the Tidyverse
 
@@ -210,7 +220,7 @@ go.
 
 ## Installing and loading packages
 
-When you first install R on your computer, it comes with a set of built-in packages and functions collectively referred to as Base R. To add additional packages, you must first install that package, and then load it into your current session. If you are using the [class Posit Cloud project]()(UPDATE LINK), the **`tidyverse`** has already been installed, so we just need to load it. You only need to install a package once on a system, but you will load it each time you start a new r session. If the package had not already been installed, we would install with a function called `install.packages()`.
+When you first install R on your computer, it comes with a set of built-in packages and functions collectively referred to as Base R. To add additional packages, you must first install that package, and then load it into your current session. If you are taking this workshop in person at the library, or using the [class Posit Cloud project](https://posit.cloud/content/8458222), the **`tidyverse`** has already been installed, so we just need to load it. You only need to install a package once on a system, but you will load it each time you start a new r session. If the package had not already been installed, we would install with a function called `install.packages()`.
 
 ```{r}
 #| warning: false
@@ -227,7 +237,7 @@ library(tidyverse)
 `install.packages()` and `library()` are two examples of **functions**.
 Functions are one of the most important components of R code. A function
 is like a canned script. It usually takes some inputs, called
-**arguments** inside parentheses following the name of the function,
+**arguments** inside the parentheses that follow the name of the function,
 performs one or more tasks, and often returns some kind of output. The
 `library()` function takes the name of the package to load as it's
 argument.
@@ -344,6 +354,8 @@ Use `summary()` to look at each column and find the data type and interquartile 
 summary(measles_us)
 ```
 
+::: {.callout-tip collapse="true" appearance="minimal"}
+
 Sometimes we get data with a large number of missing values. It can be helpful to know where data is missing before attempting to do any further analysis. R uses NA to indicate missing values. We can use the function `is.na()` to test for the presence of NAs in our data.`is.na()` will return a vector of values TRUE or FALSE. TRUE if the value is NA, FALSE if it is not. When we examined our data with the View function, we might have noticed that the first several values in Admin2Name column are missing (NA). We might want to know how many missing values total are in that column. 
 
 ```{r}
@@ -367,6 +379,7 @@ But, if you a lot of variables (columns), it would be a pain to do this for each
 colSums(is.na(measles_us))
 ```
 
+:::
 
 ### **`tidyverse`** functions for exploring data
 
@@ -485,10 +498,10 @@ Sometimes when receive a data set or start working with data, you may find that 
 ```{r}
 measles_select <-
   measles_select %>% 
-    rename(State = Admin1Name)
+    rename(state = Admin1Name)
 ```
 
-Note that in thise case, we are overwriting our original object with the new name instead of creating a new one!
+Note that in this case, we are overwriting our original object with the new name instead of creating a new one!
 
 ### `filter()`
 
@@ -497,12 +510,12 @@ conditions as arguments.
 
 ```{r}
 measles_md <- measles_select %>% 
-filter(State == "MARYLAND")
+  filter(state == "MARYLAND")
 ```
 
 
 Here we are saying keep all the rows where the
-value in the `State` column is "MARYLAND". Note the use of the double equals sign == versus the singular = sign. The double equal sign is a **logical operator**. The logical operators are:
+value in the `state` column is "MARYLAND". Note the use of the double equals sign == versus the singular = sign. The double equal sign is a **logical operator**. The logical operators are:
 
 |  operator |  meaning                 |
 |-----------|--------------------------|
@@ -520,7 +533,7 @@ value in the `State` column is "MARYLAND". Note the use of the double equals sig
 Note that after running our code, our resulting data frame (our new object `measles_md`) has `r nrow(measles_md)` observations (rows) while our original data frame had `r nrow(measles_us)`.
 
 ::: {.callout-warning}
-When matching strings you must be exact. R is case-sensitive. So `State == "Maryland"` or `State == "maryland"` would return 0 rows.
+When matching strings you must be exact. R is case-sensitive. So `state == "Maryland"` or `state == "maryland"` would return 0 rows.
 
 :::
 
@@ -531,7 +544,7 @@ Below we want just the rows for Maryland, and only include periods where the cou
 
 ```{r filter-multiple}
 measles_select %>%
-  filter(State == "MARYLAND" & CountValue > 500)
+  filter(state == "MARYLAND" & CountValue > 500)
 
 ```
 
@@ -540,19 +553,19 @@ Here, we joined together 2 conditions with the `&` logical operator. Then we **p
 What if we wanted to filter our tibble to include just the 50 states and no territories? We sure would not have to write out an expression for each state, or even all the territories. 
 
 ```{r}
-#we do not want to do this!
+# we can avoid verbose code like this with %in%
 
 measles_select %>% 
-filter(State == "MARYLAND" & State == "DELAWARE" & State == "Pennsylvania")
+filter(state == "MARYLAND" & state == "DELAWARE" & state == "Pennsylvania")
 ```
 
-Luckily, We can filter based on a vector of values with the`%in%` operator (remember we can think of a vector as a column of data). So, we can write some code to filter our data based on list of state names in our `states` tibble.
+Luckily, We can filter based on a vector of values with the `%in%` operator (remember we can think of a vector as a column of data). So, we can write some code to filter our data based on list of state names in our `states` tibble.
 
 
 ```{r filter-vector}
 measles_states_only <-
   measles_select %>% 
-  filter(State %in% states$name)
+  filter(state %in% states$name)
 ```
 
 
@@ -562,7 +575,7 @@ We could alternatively have used negation with the names of the values we specif
 
 ```{r}
 measles_states_only <- measles_select %>% 
-  filter(!State %in% c("PUERTO RICO", "GUAM", "AMERICAN SAMOA", "NORTHERN MARIANA ISLANDS", "VIRGIN ISLANDS, U.S.", "DISTRICT OF COLUMBIA"))
+  filter(!state %in% c("PUERTO RICO", "GUAM", "AMERICAN SAMOA", "NORTHERN MARIANA ISLANDS", "VIRGIN ISLANDS, U.S.", "DISTRICT OF COLUMBIA"))
 
 ```
 
@@ -578,10 +591,12 @@ measles_non_cumulative <-
 
 Once again, we have fewer rows than we started with. 
 
-### Challenge 
 
-::: {.shaded .question data-latex=""}
-Use `filter()` to limit the dataset to just the rows containing Maryland, Virginia, or Delaware and more than 1000 cases of measles. 
+:::{.callout-tip title="CHALLENGE"}
+1. Use `select()` to create a new tibble with just the `name` and `division` columns from the `states` tibble. Assign this to an object called `us_divisions`.
+2. Use `filter()` to keep just the rows in the `South Atlantic` division of the `us_divisions` tibble. Assign this to an object called `sa_division`.
+3. Use `filter()` to keep just the rows in the `measles_non_cumulative` tibble where the `state` matches one of the states in the `name` column of the `sa_division` tibble and where the `CountValue` is greater than 1000. Assign this to an object called `measles_sa`.
+
 :::
 
 Now let's do some more with our date variables.
@@ -629,12 +644,11 @@ How can we calculate the total number of measles cases for each year?
 First we need to group our data by year using our new `Year` column.
 
 ```{r groupby}
-
-yearly_count_state <-
+yearly_count <-
   measles_year %>%
   group_by(Year)
 
-yearly_count_state
+yearly_count
 ```
 
 When you inspect your new data frame, everything should look the same. Grouping prepares your data for summarize, but it does not do anything visually to the data.
@@ -642,7 +656,6 @@ When you inspect your new data frame, everything should look the same. Grouping 
 Now let's trying summarizing that data. `summarize()` condenses the value of the group values to a single value per group. Like `mutate()`, we provide the function with the name of the new column that will hold the summary information. In this case, we will use the `sum()` function on the `CountValue` column and put this in a new column called `TotalCount`. Summarize will drop the columns that aren't being used.
 
 ```{r count-by-year}
-#Get totals for each state each year.
 yearly_count <-
   measles_year %>%
   group_by(Year) %>%
@@ -657,7 +670,7 @@ A more useful view might be to look for yearly totals of case counts by state. W
 
 yearly_count_state <-
   measles_year %>%
-  group_by(Year, State) %>%
+  group_by(Year, state) %>%
   summarise(TotalCount = sum(CountValue))
 
 yearly_count_state
@@ -712,7 +725,7 @@ Each column in our population dataset represents a state. To make it tidy we are
 library(tidyr)
 hist_pop_long <- hist_pop %>%
   pivot_longer(ALASKA:WYOMING,
-               names_to = "State",
+               names_to = "state",
                values_to = "pop1000")
 ```
 
@@ -723,10 +736,10 @@ View(hist_pop_long)
 Now our two datasets have similar structures, a column of state names, a column of years, and a column of values. Let's join these two datasets by the state and year columns. Note that if both sets have the same column names, you do not need to specify anything in the by argument. We use a left join here which preserves all the rows in our measles dataset and adds the matching rows from the population dataset.
 
 ```{r}
-joined_df <- yearly_count_state %>% 
-  left_join(hist_pop_long, by=join_by(State, Year == DATE))
+measles_joined<- yearly_count_state %>% 
+  left_join(hist_pop_long, by=join_by(state, Year == DATE))
 
-joined_df
+measles_joined
 ```
 ::: {.callout-tip title="CHALLENGE"}
 1. Use mutate() to calculate the rate of measles per 100,000 persons (remember population is given in 1000s).
@@ -739,12 +752,12 @@ joined_df
 ```{r}
 # 1. 
 measles_yearly_rates <-
-  joined_df %>% 
+  measles_joined %>% 
   mutate(epi_rate = (TotalCount / pop1000)*1000)
 
 # 2. 
 yearly_rates_joined <- measles_yearly_rates %>% 
-  left_join(states, by = join_by(State == name))
+  left_join(states, by = join_by(state == name))
 ```
 
 
