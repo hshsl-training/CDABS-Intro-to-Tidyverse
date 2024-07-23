@@ -1,1 +1,1 @@
-Sitemap: https://hshsl-training.github.io/tidyverse-workshop-summer2024/sitemap.xml
+Sitemap: https://hshsl-training.github.io/cdabs-intro-to-tidyverse/sitemap.xml
