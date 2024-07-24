@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>CDABS Data Wrangling and Visualization in R - Data Visualization with ggplot2</title>
+<title>Data Visualization with ggplot2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -111,8 +111,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">CDABS Data Wrangling and Visualization in R</span>
+    <a href="https://www2.hshsl.umaryland.edu/cdabs/" class="navbar-brand navbar-brand-logo">
+    <img src="https://www2.hshsl.umaryland.edu/hshsl/bin/img/logo_white@2x.png" alt="HSHSL logo" class="navbar-logo">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -192,22 +192,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="getting-set-up" class="level2">
 <h2 class="anchored" data-anchor-id="getting-set-up">Getting set up</h2>
 <ol type="1">
-<li>Sign in to RStudio Cloud (Or, if you haven’t already, sign up for a free account at RStudio Cloud https://rstudio.cloud/plans/free)</li>
-<li>Go to the RStudio Cloud class project for this session <replace link=""></replace></li>
-<li>Note the text that marks this as a Temporary Copy. Select the <code>Save a Permanent Copy</code> button to begin working!</li>
+<li>Go to <code>File &gt; New Project</code></li>
+<li>In <code>Create project from</code> menu choose <code>Existing Directory</code></li>
+<li>Browse to <code>Desktop &gt; Session02_DataVisualization</code></li>
+<li>Select the check box that says <code>Open in New Session</code></li>
 <li>Open the companion script called <code>02-DataVisualization.R</code></li>
-<li>Use the <code>library()</code> function to load the <code>tidyverse</code></li>
-<li>Use the <code>read_csv()</code>function to import the the <code>yearly_rates_joined</code> and <code>region_summary</code> csv files.</li>
+<li>Use the <code>library()</code> function to load the <code>tidyverse</code>, <code>viridis</code>, and <code>usmap</code> packages.</li>
+<li>Use the <code>read_csv()</code> function to import the <code>yearly_rates_joined</code> and the <code>region_summary</code> csv files.</li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" data-appearence="minimal">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Follow Along at Home
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Posit (RStudio) Cloud is a browser-based version of RStudio. It will allow you to use RStudio without needing to download anything to your computer. Posit Cloud automatically organizes things into Projects. You can also easily share your R projects with others.</p>
+<p>Get Started:</p>
+<ol type="1">
+<li>Create your free RStudio Cloud account at <a href="https://posit.cloud/plans/free" class="uri">https://posit.cloud/plans/free</a> if you haven’t already.</li>
+<li>Go to the class project <a href="https://posit.cloud/content/8458074" class="uri">https://posit.cloud/content/8458074</a></li>
+<li>Note the text that marks this as a Temporary Copy. Select the <code>Save a Permanent Copy</code> button to begin working!</li>
+</ol>
+</div>
+</div>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>yearly_rates_joined <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/yearly_rates_joined.csv"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>region_summary <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/region_summary.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usmap)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>yearly_rates_joined <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/yearly_rates_joined.csv"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>region_summary <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/region_summary.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="why-data-visualization" class="level2">
 <h2 class="anchored" data-anchor-id="why-data-visualization">Why Data Visualization?</h2>
-<p>Visualization is an important process which can help us explore, understand, analyze, and communicate about data. Visualizations, including many kinds of graphs, charts, maps, animations, and infographics, can be far more effective at quickly communicating important points than raw numbers alone. But visualizations also have the power to mislead. And so throughout this class, we’ll be covering some good data visualization practices. Slides accompanying this section can be found here: https://osf.io/yk5bx^[Slides created by the [Visualizing the Future project] (https://visualizingthefuture.github.io/), made possible in part by the Institute of Museum and Library Services, RE-73-18-0059-18.</p>
+<p>Visualization is an important process which can help us explore, understand, analyze, and communicate about data. Visualizations, including many kinds of graphs, charts, maps, animations, and infographics, can be far more effective at quickly communicating important points than raw numbers alone. But visualizations also have the power to mislead. And so throughout this class, we’ll be covering some good data visualization practices. Slides accompanying this section can be found here: <a href="https://osf.io/yk5bx" class="uri">https://osf.io/yk5bx</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 </section>
 <section id="visualizing-data-with-ggplot2" class="level2">
 <h2 class="anchored" data-anchor-id="visualizing-data-with-ggplot2">Visualizing Data with ggplot2</h2>
@@ -735,7 +762,13 @@ Working with color palettes
 
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Slides created by the <a href="https://visualizingthefuture.github.io/">Visualizing the Future project</a>, made possible in part by the Institute of Museum and Library Services, RE-73-18-0059-18.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -1152,11 +1185,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>This material is shared under a <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> license.</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/edit/main/02-DataVisualization.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
-    <div class="nav-footer-right">
       &nbsp;
-    </div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/edit/main/02-DataVisualization.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p><a href="https://creativecommons.org/licenses/by-sa/4.0/"><img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg" class="img-fluid" alt="CC BY" width="125"></a></p>
+</div>
   </div>
 </footer>
 

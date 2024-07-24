@@ -137,42 +137,35 @@
     "href": "index.html",
     "title": "Data Wrangling and Visualization in R",
     "section": "",
-    "text": "Schedule\n\n\n\nDate\nTopic\n\n\n\n\nTBD\nTBD\n\n\nTBD\nTBD"
+    "text": "Session 1: Data Wrangling This session will introduce participants to the basics of getting started with R and RStudio and introduce the workhorse package dplyr. Participants will get hands-on experience wrangling real data sets.\nTopics covered include:\n\nNavigating RStudio\nKey R concepts and terminology\nImporting data from external files\nSubsetting and filtering data\nSplit-Apply-Combine analysis workflow\n\nSession 2: Data Visualization Learn how to use ggplot2, a robust Tidyverse package used to create high quality graphics for exploring and communicating your data. We will go beyond basic graphs and learn how to customize and annotate our graphs for more effective storytelling. Participants will have the best experience if they attended session one in this series or have some previous experience with R and the Tidyverse.\nTopics covered include:\n\nVisualization best practices\nGrammar of graphics – ggplot2 layers, aesthetics, and geoms\nChoosing an effective graph type for your data\nCustomizing labels, axes, legends, and more\nChoosing a color palette and themes"
   },
   {
     "objectID": "index.html#course-description",
     "href": "index.html#course-description",
     "title": "Data Wrangling and Visualization in R",
     "section": "",
-    "text": "Schedule\n\n\n\nDate\nTopic\n\n\n\n\nTBD\nTBD\n\n\nTBD\nTBD"
-  },
-  {
-    "objectID": "index.html#acknowledgements",
-    "href": "index.html#acknowledgements",
-    "title": "Data Wrangling and Visualization in R",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements"
+    "text": "Session 1: Data Wrangling This session will introduce participants to the basics of getting started with R and RStudio and introduce the workhorse package dplyr. Participants will get hands-on experience wrangling real data sets.\nTopics covered include:\n\nNavigating RStudio\nKey R concepts and terminology\nImporting data from external files\nSubsetting and filtering data\nSplit-Apply-Combine analysis workflow\n\nSession 2: Data Visualization Learn how to use ggplot2, a robust Tidyverse package used to create high quality graphics for exploring and communicating your data. We will go beyond basic graphs and learn how to customize and annotate our graphs for more effective storytelling. Participants will have the best experience if they attended session one in this series or have some previous experience with R and the Tidyverse.\nTopics covered include:\n\nVisualization best practices\nGrammar of graphics – ggplot2 layers, aesthetics, and geoms\nChoosing an effective graph type for your data\nCustomizing labels, axes, legends, and more\nChoosing a color palette and themes"
   },
   {
     "objectID": "index.html#license",
     "href": "index.html#license",
     "title": "Data Wrangling and Visualization in R",
     "section": "License",
-    "text": "License\nThis material is shared under a CC-BY 4.0 license."
+    "text": "License\n“This material is shared under a CC-BY 4.0 license.”"
   },
   {
     "objectID": "02-DataVisualization.html#getting-set-up",
     "href": "02-DataVisualization.html#getting-set-up",
     "title": "Data Visualization with ggplot2",
     "section": "Getting set up",
-    "text": "Getting set up\n\nSign in to RStudio Cloud (Or, if you haven’t already, sign up for a free account at RStudio Cloud https://rstudio.cloud/plans/free)\nGo to the RStudio Cloud class project for this session \nNote the text that marks this as a Temporary Copy. Select the Save a Permanent Copy button to begin working!\nOpen the companion script called 02-DataVisualization.R\nUse the library() function to load the tidyverse\nUse the read_csv()function to import the the yearly_rates_joined and region_summary csv files.\n\n\nlibrary(tidyverse)\nyearly_rates_joined &lt;- read_csv(\"data/yearly_rates_joined.csv\")\nregion_summary &lt;- read_csv(\"data/region_summary.csv\")"
+    "text": "Getting set up\n\nGo to File &gt; New Project\nIn Create project from menu choose Existing Directory\nBrowse to Desktop &gt; Session02_DataVisualization\nSelect the check box that says Open in New Session\nOpen the companion script called 02-DataVisualization.R\nUse the library() function to load the tidyverse, viridis, and usmap packages.\nUse the read_csv() function to import the yearly_rates_joined and the region_summary csv files.\n\n\n\n\n\n\n\nFollow Along at Home\n\n\n\n\n\nPosit (RStudio) Cloud is a browser-based version of RStudio. It will allow you to use RStudio without needing to download anything to your computer. Posit Cloud automatically organizes things into Projects. You can also easily share your R projects with others.\nGet Started:\n\nCreate your free RStudio Cloud account at https://posit.cloud/plans/free if you haven’t already.\nGo to the class project https://posit.cloud/content/8458074\nNote the text that marks this as a Temporary Copy. Select the Save a Permanent Copy button to begin working!\n\n\n\n\n\nlibrary(tidyverse)\nlibrary(viridis)\nlibrary(usmap)\n\nyearly_rates_joined &lt;- read_csv(\"data/yearly_rates_joined.csv\")\n\nregion_summary &lt;- read_csv(\"data/region_summary.csv\")"
   },
   {
     "objectID": "02-DataVisualization.html#why-data-visualization",
     "href": "02-DataVisualization.html#why-data-visualization",
     "title": "Data Visualization with ggplot2",
     "section": "Why Data Visualization?",
-    "text": "Why Data Visualization?\nVisualization is an important process which can help us explore, understand, analyze, and communicate about data. Visualizations, including many kinds of graphs, charts, maps, animations, and infographics, can be far more effective at quickly communicating important points than raw numbers alone. But visualizations also have the power to mislead. And so throughout this class, we’ll be covering some good data visualization practices. Slides accompanying this section can be found here: https://osf.io/yk5bx^[Slides created by the [Visualizing the Future project] (https://visualizingthefuture.github.io/), made possible in part by the Institute of Museum and Library Services, RE-73-18-0059-18."
+    "text": "Why Data Visualization?\nVisualization is an important process which can help us explore, understand, analyze, and communicate about data. Visualizations, including many kinds of graphs, charts, maps, animations, and infographics, can be far more effective at quickly communicating important points than raw numbers alone. But visualizations also have the power to mislead. And so throughout this class, we’ll be covering some good data visualization practices. Slides accompanying this section can be found here: https://osf.io/yk5bx1"
   },
   {
     "objectID": "02-DataVisualization.html#visualizing-data-with-ggplot2",
@@ -201,5 +194,12 @@
     "title": "Data Visualization with ggplot2",
     "section": "Next Steps: From BeginnR to PractitionR",
     "text": "Next Steps: From BeginnR to PractitionR\nI hope you enjoyed this very brief introduction to R. You may be wondering - where do you go from here?\nThere are tons of R classes and tutorials on the internet, but the best way to learn R is to use it! I recommend picking a data set and just playing around. There’s no harm in making mistakes along the way. It’s much easier to find a useful tutorial if you look for ones that teach a specific task you want to accomplish.\nAlso, check out these helpful resources:\n\nR for Data Science, by Hadley Wickham\nTidyverse documentation\nR Graph Gallery\nR Graphics Cookbook"
+  },
+  {
+    "objectID": "02-DataVisualization.html#footnotes",
+    "href": "02-DataVisualization.html#footnotes",
+    "title": "Data Visualization with ggplot2",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nSlides created by the Visualizing the Future project, made possible in part by the Institute of Museum and Library Services, RE-73-18-0059-18.↩︎"
   }
 ]
