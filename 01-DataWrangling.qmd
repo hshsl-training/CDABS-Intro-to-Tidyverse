@@ -13,9 +13,12 @@ editor:
 By the end of this session, students will be able to:
 
 -   Explain some benefits of learning R
+-   Understand the difference between R and RStudio
 -   Navigate RStudio
+-   Define key R concepts and terminology.
 -   Identify sources of documentation about R packages and functions
 -   Apply commonly used **`tidyverse`** functions to a real data set
+-   Becoming familiar with a typical workflow for exploring and wrangling data.
 
 
 ## Why learn R?
@@ -70,13 +73,7 @@ By the end of this session, students will be able to:
     snippets](https://www.tidyverse.org/help/) are more likely to
     attract knowledgeable responses.
     
-## The Data
 
-For this lesson we will be using data which comes from [Project Tycho](https://www.tycho.pitt.edu/) - an open data project from the University of Pittsburgh which provides standardized datasets on numerous diseases to aid global health research. 
-
-Throughout this lesson, we will be using a dataset from Project Tycho featuring historical counts of measles cases in the U.S.. We want to clean and present this data in a way that makes it easy to see how measles cases fluctuated over time.
-
-A useful feature of Project Tycho data is their use of a common set of variables. Read more about their [data format](https://www.tycho.pitt.edu/dataformat/ProjectTychoPreCompiledDataFormat.pdf).
 
 ## Starting out in R
 
@@ -149,6 +146,7 @@ knitr::include_graphics("images/rstudio.png")
 RStudio provides a useful feature called `Projects` which act like a container for your work. As you use R more, you will find it useful to make sure your files and environment for one real-world project are kept together and separate from other projects. 
 
 Let's create a new project now. 
+
 1. Go to `File > New Project`
 2. In `Create project from` menu choose `Existing Directory`
 3. Browse to `Desktop > Session01_DataWrangling`
@@ -166,17 +164,16 @@ computer. Posit Cloud automatically organizes things into Projects. You can also
 Get Started:
 
 1.  Create your free RStudio Cloud account at
-    <https://rstudio.cloud/plans/free>.
+    <https://posit.cloud/plans/free>.
 2.  Go to the class project <https://posit.cloud/content/8458222>
 3.  Note the text that marks this as a Temporary Copy. Select the
     `Save a Permanent Copy` button to begin working!
-    
     
 :::
 
 ## R Scripts
 
-A script is a document in which you write your code. This makes it easy to re-run that code when you need to. In addition to code, your script can also have comments, which start with a `#` symbol. These comments make your script more human readable, but are ignored by the computer. 
+A script is a text file in which you write your code. R scripts are generally recognized by the `.R` file extension. Scripts make it easy to re-run that code when you need to. In addition to code, your script can also have comments, which start with a `#` symbol. These comments make your script more human readable, but are ignored by the computer. 
 
 To get started in this lesson - open up the script in your RStudio Project called `01_DataWrangling.R` 
 
@@ -276,6 +273,13 @@ you create and analyze tidy datasets.
 knitr::include_graphics("images/tidy-data.PNG")
 ```
 
+## The Data for This Lesson
+
+For this lesson we will be using data which comes from [Project Tycho](https://www.tycho.pitt.edu/) - an open data project from the University of Pittsburgh which provides standardized datasets on numerous diseases to aid global health research. 
+
+Throughout this lesson, we will be using a dataset from Project Tycho featuring historical counts of measles cases in the U.S.. We want to clean and present this data in a way that makes it easy to see how measles cases fluctuated over time.
+
+A useful feature of Project Tycho data is their use of a common set of variables. Read more about their [data format](https://www.tycho.pitt.edu/dataformat/ProjectTychoPreCompiledDataFormat.pdf).
 
 ## Importing data
 
@@ -324,15 +328,15 @@ states <- read_csv(file = "data/states.csv")
 
 ## Exploring and Summarizing data
 
-After reading the data, you will typically want to start exploring it. 
+Data wrangling, also known as data cleaning or data munging, involves preparing raw data for analysis by transforming it into a more useful format. This process includes detecting and correcting errors, handling missing values, and reorganizing data for analysis. Using the tidyverse, we can streamline these tasks efficiently. After importing the data, you'll typically start by exploring it, identifying patterns, and making necessary adjustments to prepare it for visualization and further analysis. This foundational step ensures that your data is accurate, consistent, and ready for insightful exploration.
 
 ### Vectors and Data Frames and Tibbles oh my!
 
-First, it's important to understand the type of object we just created. In R, tabular data like you find in a spreadsheet is stored in a **data frame**, one of the fundamental **data structures** in R. A data frame is rectangular, two dimensional data. That is, it has both columns and rows. Data frames can store multiple **data types**, such as numeric, character, and logical data. 
+First, it's important to understand the type of object we just created. In R, tabular data like you find in a spreadsheet is stored in a **data frame**, one of the fundamental **data structures** in R. A data frame is a rectangular, two-dimensional data structure. That is, it has both columns and rows. Data frames can store multiple **data types**, such as numeric, character, and logical data, also known as classes. 
 
 A **tibble** is a tidyverse version of the standard R data frame. For our purposes, the differences are minor enough that we can generally use the terms interchangeably, but to be precise, we will be working with tibbles in this lesson. All tibbles are data frames, but not all data frames are tibbles. 
 
-Another important R data structure is a **vector**. A vector is a one-dimensional structure. That is, it is simply a sequence of elements. A vector can have only one data type. Data frames are created from multiple vectors, that is, each column in a data frame is a vector.
+Another important R data structure is a **vector**. A vector is a one-dimensional data structure. That is, it is simply a sequence of elements. A vector can have only one data type. Data frames are created from multiple vectors, that is, each column in a data frame is a vector of the same length.
 
 
 ### Base R functions for exploring data
@@ -354,7 +358,7 @@ Use `summary()` to look at each column and find the data type and interquartile 
 summary(measles_us)
 ```
 
-::: {.callout-tip collapse="true" appearance="minimal"}
+::: {.callout-note collapse="true" title="Missing data"}
 
 Sometimes we get data with a large number of missing values. It can be helpful to know where data is missing before attempting to do any further analysis. R uses NA to indicate missing values. We can use the function `is.na()` to test for the presence of NAs in our data.`is.na()` will return a vector of values TRUE or FALSE. TRUE if the value is NA, FALSE if it is not. When we examined our data with the View function, we might have noticed that the first several values in Admin2Name column are missing (NA). We might want to know how many missing values total are in that column. 
 
@@ -373,7 +377,7 @@ sum(is.na(measles_us$Admin2Name))
 
 `sum()` treats each each TRUE as a 1 and each FALSE as a 0. In that column there are `r sum(is.na(measles_us$Admin2Name))` out of `r length(measles_us$Admin2Name)` 
 
-But, if you a lot of variables (columns), it would be a pain to do this for each one. So instead we can use a similar function `colSums`
+But, if you have a lot of variables (columns), it would be a pain to do this for each one. So instead we can use a similar function `colSums`
 
 ```{r}
 colSums(is.na(measles_us))
@@ -392,8 +396,8 @@ The `glimpse()` function which is part of the **`tidyverse`** package
 glimpse(measles_us)
 ```
 
-`distinct()` returns the distinct rows in a data frame. It can be used on a column to return the distinct values in that column. The first
-argument you supply is the data frame object. Subsequent arguments
+`distinct()` returns the distinct rows in a tibble. It can be used on a column to return the distinct values in that column. The first
+argument you supply is the tibble object. Subsequent arguments
 include the variables you want to count.
 
 ```{r}
@@ -408,7 +412,7 @@ distinct(measles_us, Admin1Name)
 
 `count()` is similar to `distinct()` but also returns the number of observations
 (i.e. rows) for each of those distinct values. The first
-argument you supply is the data frame object. Subsequent arguments
+argument you supply is the tibble object. Subsequent arguments
 include the variables you want to count.
 
 ```{r}
@@ -432,7 +436,7 @@ measles_us %>%
 
 In many tidyverse functions, the first argument is the name of the data
 frame you're applying the function to. So when you use the pipe, you'll
-generally start a line of code with the name of a data frame. One
+generally start a line of code with the name of a tibble. One
 benefit you might notice right away, is that when we use the pipe,
 RStudio will supply the column names which helps to reduce typing and
 typos.
@@ -505,7 +509,7 @@ Note that in this case, we are overwriting our original object with the new name
 
 ### `filter()`
 
-While `select()` acts on columns, `filter()` acts on rows. `filter()` takes the name of the data frame and one or more logical
+While `select()` acts on columns, `filter()` acts on rows. `filter()` takes the name of the tibble and one or more logical
 conditions as arguments. 
 
 ```{r}
@@ -530,7 +534,7 @@ value in the `state` column is "MARYLAND". Note the use of the double equals sig
 | !x        | not x                    |
 
 
-Note that after running our code, our resulting data frame (our new object `measles_md`) has `r nrow(measles_md)` observations (rows) while our original data frame had `r nrow(measles_us)`.
+Note that after running our code, our resulting tibble (our new object `measles_md`) has `r nrow(measles_md)` observations (rows) while our original tibble had `r nrow(measles_us)`.
 
 ::: {.callout-warning}
 When matching strings you must be exact. R is case-sensitive. So `state == "Maryland"` or `state == "maryland"` would return 0 rows.
@@ -548,7 +552,7 @@ measles_select %>%
 
 ```
 
-Here, we joined together 2 conditions with the `&` logical operator. Then we **piped** that resulting data frame to `count()` which remember takes a data frame as its first argument.
+Here, we joined together 2 conditions with the `&` logical operator. Then we **piped** that resulting tibble to `count()` which remember takes a tibble as its first argument.
 
 What if we wanted to filter our tibble to include just the 50 states and no territories? We sure would not have to write out an expression for each state, or even all the territories. 
 
@@ -611,7 +615,7 @@ glimpse(measles_non_cumulative)
 
 We can see from this that the dates are being interpreted as *character* data. We want R to recognize them as dates. We can create new variables and adjust existing variables with the `mutate()` function.
 
-`mutate()` takes as an argument the name and definition of the new column you're creating. You can create multiple new columns at a time, separating each new variable name and definition with a comma. Note that if you use the same variable name as an existing variable name it overwrites that column. Otherwise, it will add a column to your data frame.
+`mutate()` takes as an argument the name and definition of the new column you're creating. Note that if you use the same variable name as an existing variable name it overwrites that column. Otherwise, it will add a column to your tibble.
 
 To change the variable to a date - we are using a date parsing function from another package called **`lubridate`**. `mdy()` takes a character string or number in month-day-year format (as we have here) and returns a formal date object in YYYY-MM-DD format. There are similar functions if the input date is in year-month-day `ydm()` or day-month-year `dmy()`
 
@@ -651,7 +655,7 @@ yearly_count <-
 yearly_count
 ```
 
-When you inspect your new data frame, everything should look the same. Grouping prepares your data for summarize, but it does not do anything visually to the data.
+When you inspect your new tibble, everything should look the same. Grouping prepares your data for summarize, but it does not do anything visually to the data.
 
 Now let's trying summarizing that data. `summarize()` condenses the value of the group values to a single value per group. Like `mutate()`, we provide the function with the name of the new column that will hold the summary information. In this case, we will use the `sum()` function on the `CountValue` column and put this in a new column called `TotalCount`. Summarize will drop the columns that aren't being used.
 
@@ -742,12 +746,12 @@ measles_joined<- yearly_count_state %>%
 measles_joined
 ```
 ::: {.callout-tip title="CHALLENGE"}
-1. Use mutate() to calculate the rate of measles per 100,000 persons (remember population is given in 1000s).
+1. Use `mutate()` to calculate the rate of measles per 100,000 persons (remember population is given in 1000s).
 
 
 1. Try joining `measles_yearly_rates` to `states`. What variable do you need to join by?
 
-:::: {.callout-tip collapse=TRUE appearance="minimal"}
+:::: {.callout-tip title="Solution" icon=false collapse="true"}
 
 ```{r}
 # 1. 
@@ -764,6 +768,8 @@ yearly_rates_joined <- measles_yearly_rates %>%
 ::::
 
 :::
+
+
 
 
 

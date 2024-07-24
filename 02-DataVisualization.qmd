@@ -1,31 +1,65 @@
 ---
 title: "Data Visualization with ggplot2"
+knitr:
+  opts_chunk: 
+    warning: false
+    message: false
+    error: false
+    
 ---
+## Learning Objectives
+
+
 ## Getting set up
 
-1. Sign in to RStudio Cloud (Or, if you haven't already, sign up for a free account at RStudio Cloud https://rstudio.cloud/plans/free)
-2. Go to the RStudio Cloud class project for this session <REPLACE LINK>
-3. Note the text that marks this as a Temporary Copy. Select the `Save a Permanent Copy` button to begin working!
-4. Open the script called `02-DataVisualization.R`
-5. Use the `library()` function to load the `tidyverse`
-6. Use the `read_csv()`function to import the the `yearly_rates_joined` and `region_summary` csv files.
+1. Go to `File > New Project`
+2. In `Create project from` menu choose `Existing Directory`
+3. Browse to `Desktop > Session02_DataVisualization`
+4. Select the check box that says `Open in New Session`
+4. Open the companion script called `02-DataVisualization.R`
+5. Use the `library()` function to load the `tidyverse`, `viridis`, and `usmap` packages.
+6. Use the `read_csv()` function to import the `yearly_rates_joined` and the `region_summary` csv files.
+
+
+::: {.callout-tip appearence="minimal" collapse="true"}
+
+### Follow Along at Home
+
+Posit (RStudio) Cloud is a browser-based version of RStudio. It will
+allow you to use RStudio without needing to download anything to your
+computer. Posit Cloud automatically organizes things into Projects. You can also easily share your R projects with others. 
+
+Get Started:
+
+1.  Create your free RStudio Cloud account at
+    <https://posit.cloud/plans/free> if you haven't already.
+2.  Go to the class project <https://posit.cloud/content/8458074>
+3.  Note the text that marks this as a Temporary Copy. Select the
+    `Save a Permanent Copy` button to begin working!
+    
+:::
+
 
 
 ```{r}
 library(tidyverse)
+library(viridis)
+library(usmap)
+
 yearly_rates_joined <- read_csv("data/yearly_rates_joined.csv")
+
 region_summary <- read_csv("data/region_summary.csv")
 ```
 
 
 ## Why Data Visualization?
 
-Visualization is an important process which can help us explore, understand, analyze, and communicate about data. Visualizations, including many kinds of graphs, charts, maps, animations, and infographics, can be far more effective at quickly communicating important points than raw numbers alone. But visualizations also have the power to mislead. And so throughout this class, we'll be covering some good data visualization practices. Slides accompanying this section can be found here: https://osf.io/yk5bx^[Slides created by the [Visualizing the Future project] (https://visualizingthefuture.github.io/), made possible in part by the Institute of Museum and Library Services, RE-73-18-0059-18.
+Visualization is an important process which can help us explore, understand, analyze, and communicate about data. Visualizations, including many kinds of graphs, charts, maps, animations, and infographics, can be far more effective at quickly communicating important points than raw numbers alone. But visualizations also have the power to mislead. And so throughout this class, we'll be covering some good data visualization practices. Slides accompanying this section can be found here: <https://osf.io/yk5bx>^[Slides created by the [Visualizing the Future project](https://visualizingthefuture.github.io/), made possible in part by the Institute of Museum and Library Services, RE-73-18-0059-18.]
 
 
 ## Visualizing Data with ggplot2 
 
-Next, we will learn about **`ggplot2`** - a tidyverse package for visualizing data. It is a powerful and flexible tool that allows you to create fully customizable, publication quality graphics. The gg in **`ggplot2`** stands for grammar of graphics. The grammar of graphics is the underlying philosophy of the package. It focuses on creating graphics in layers. Start with the data – map the data the axes and to aesthetic qualities like size, shape, and color and geometries like dots, lines, and polygons. Further refine the appearance of your plot by adjusting scales and legends, labels, coordinate systems, and adding annotations.
+Next, we will learn about **`ggplot2`** - a tidyverse package for visualizing data. It is a powerful and flexible R package that allows you to create fully customizable, publication quality graphics. The `gg` in **`ggplot2`** stands for grammar of graphics. The grammar of graphics is the underlying philosophy of the package. It focuses on creating graphics in layers. Start with the data – map the data to the axes and to aesthetic qualities like size, shape, and color and geometries like dots, lines, and polygons. Further refine the appearance of your plot by adjusting scales and legends, labels, coordinate systems, and adding annotations.
 
 
 All `ggplot2` graphs start with the same basic template:
@@ -82,7 +116,7 @@ region_summary %>%
 How did we know the color names "blue" and "purple" would work in the code above? R has 657 (!!) built in color names. You can see them by calling the function `colors()`. You can also specify colors using rgb and hexadecimal codes.
 :::
 
-Now we have manually set a value for the fill and color. To create our initial graph, we used the `mapping` argument and the `aes()` function to map the x axis to the `BENE_RACE_CD` variable. Watch what happens if we map the fill property to the `BENE_RACE_CD` variable as well.
+Now we have manually set a value for the fill and color. To create our initial graph, we used the `mapping` argument and the `aes()` function to map the x axis to the `region`` variable. Watch what happens if we map the fill property to the `region` variable as well.
 
 
 ```{r}
@@ -221,8 +255,9 @@ yearly_rates_joined %>%
   labs(title = "Measles Cases Decrease After Vaccine Introduced", x = "Year", y = "Total Measles Case Count")
 ```
 
+### Making Grouped Graphs
 
-### Working with color palettes
+::: {.callout-note title="Working with color palettes"}
 
 While **`ggplot`** comes with a default color palette, there are numerous other palettes out there you can use, such as:
 
@@ -231,6 +266,8 @@ While **`ggplot`** comes with a default color palette, there are numerous other 
 - [**`ggthemes`**](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)
 - [**`ggsci`**](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html)
 - [**`wesanderson`**](https://github.com/karthik/wesanderson#readme)
+
+:::
 
 Let’s try applying a viridis palette. viridis was designed to be especially robust for many forms of color-blindness. It is also meant to print well in grey scale. As an additional advantage, a lightweight form of the package is included with ggplot2, so there is no need to install additional packages.
 

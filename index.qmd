@@ -15,19 +15,27 @@ css: styles.css
 ---
 
 ## Course Description: 
+**Session 1: Data Wrangling**
+This session will introduce participants to the basics of getting started with R and RStudio and introduce the workhorse package `dplyr`.  Participants will get hands-on experience wrangling real data sets.
 
+Topics covered include:
 
+- Navigating RStudio
+- Key R concepts and terminology
+- Importing data from external files
+- Subsetting and filtering data
+- Split-Apply-Combine analysis workflow
 
-**Schedule**
+**Session 2: Data Visualization**
+Learn how to use ggplot2, a robust Tidyverse package  used to create high quality graphics for exploring and communicating your data. We will go beyond basic graphs and learn how to customize and annotate our graphs for more effective storytelling. Participants will have the best experience if they attended session one in this series or have some previous experience with R and the Tidyverse.
 
-| Date | Topic                     |
-|------|---------------------------|
-| TBD  | TBD |
-| TBD  | TBD  |
+Topics covered include:
 
-
-## Acknowledgements
-
+- Visualization best practices
+- Grammar of graphics – ggplot2 layers, aesthetics, and geoms
+- Choosing an effective graph type for your data
+- Customizing labels, axes, legends, and more
+- Choosing a color palette and themes
 
 ## License
-This material is shared under a [CC-BY    4.0](https://creativecommons.org/licenses/by/4.0/) license.
+"This material is shared under a [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) license."
