@@ -155,11 +155,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#the-data-for-this-lesson" id="toc-the-data-for-this-lesson" class="nav-link" data-scroll-target="#the-data-for-this-lesson">The Data for This Lesson</a></li>
   <li><a href="#ggplot2-basics" id="toc-ggplot2-basics" class="nav-link" data-scroll-target="#ggplot2-basics"><strong><code>ggplot2</code></strong> Basics</a></li>
   <li><a href="#setting-vs-mapping-aesthetics" id="toc-setting-vs-mapping-aesthetics" class="nav-link" data-scroll-target="#setting-vs-mapping-aesthetics">Setting vs mapping aesthetics</a></li>
-  <li><a href="#telling-a-data-story" id="toc-telling-a-data-story" class="nav-link" data-scroll-target="#telling-a-data-story">Telling a data story</a>
-  <ul class="collapse">
-  <li><a href="#making-grouped-graphs" id="toc-making-grouped-graphs" class="nav-link" data-scroll-target="#making-grouped-graphs">Making Grouped Graphs</a></li>
+  <li><a href="#telling-a-data-story" id="toc-telling-a-data-story" class="nav-link" data-scroll-target="#telling-a-data-story">Telling a data story</a></li>
+  <li><a href="#working-with-three-variables" id="toc-working-with-three-variables" class="nav-link" data-scroll-target="#working-with-three-variables">Working with Three Variables</a></li>
   <li><a href="#changing-the-theme" id="toc-changing-the-theme" class="nav-link" data-scroll-target="#changing-the-theme">Changing the theme</a></li>
-  </ul></li>
   <li><a href="#faceting-and-small-multiples" id="toc-faceting-and-small-multiples" class="nav-link" data-scroll-target="#faceting-and-small-multiples">Faceting and Small Multiples</a></li>
   <li><a href="#maps" id="toc-maps" class="nav-link" data-scroll-target="#maps">Maps</a></li>
   <li><a href="#next-steps-from-beginnr-to-practitionr" id="toc-next-steps-from-beginnr-to-practitionr" class="nav-link" data-scroll-target="#next-steps-from-beginnr-to-practitionr">Next Steps: From BeginnR to PractitionR</a></li>
@@ -453,8 +451,9 @@ Note
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"figures/yearly_measles_count.png"</span>, <span class="at">plot =</span> yearly_count_line)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="making-grouped-graphs" class="level3">
-<h3 class="anchored" data-anchor-id="making-grouped-graphs">Making Grouped Graphs</h3>
+</section>
+<section id="working-with-three-variables" class="level2">
+<h2 class="anchored" data-anchor-id="working-with-three-variables">Working with Three Variables</h2>
 <p>If we have different groups in our data, we might want to use the graph to compare them. Let’s create another line graph with a line for each region. Since the regions are different sizes, let’s compare the average rate instead of the total count.</p>
 <p>First, let’s summarize our data</p>
 <div class="cell">
@@ -539,8 +538,8 @@ Note
 </div>
 </div>
 </section>
-<section id="changing-the-theme" class="level3">
-<h3 class="anchored" data-anchor-id="changing-the-theme">Changing the theme</h3>
+<section id="changing-the-theme" class="level2">
+<h2 class="anchored" data-anchor-id="changing-the-theme">Changing the theme</h2>
 <p>The theme of a <strong><code>ggplot2</code></strong> graph controls the overall look and all non-data elements of the plot. There are several built-in themes which can be applied as another layer. Start typing <code>theme_</code> in RStudio to see a list of themes. You can also use the <code>theme()</code> function to modify aspects of an existing theme. Here we apply <code>theme_classic()</code> which removes the grid lines and grey background of the default theme.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>regional_rates <span class="sc">%&gt;%</span> </span>
@@ -576,7 +575,6 @@ Note
 </div>
 </div>
 </div>
-</section>
 </section>
 <section id="faceting-and-small-multiples" class="level2">
 <h2 class="anchored" data-anchor-id="faceting-and-small-multiples">Faceting and Small Multiples</h2>
