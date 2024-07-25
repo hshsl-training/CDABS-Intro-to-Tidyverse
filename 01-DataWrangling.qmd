@@ -757,7 +757,7 @@ measles_joined
 # 1. 
 measles_yearly_rates <-
   measles_joined %>% 
-  mutate(epi_rate = (TotalCount / pop1000)*1000)
+  mutate(epi_rate = (TotalCount / pop1000)*100)
 
 # 2. 
 yearly_rates_joined <- measles_yearly_rates %>% 

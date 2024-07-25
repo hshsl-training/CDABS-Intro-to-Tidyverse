@@ -169,17 +169,14 @@ hist_pop <-
 # pivot state name columns to one column called state. Put the values from those columns in a column called pop100
 hist_pop_long <- hist_pop %>%
   pivot_longer(ALASKA:WYOMING,
-               names_to = "State",
+               names_to = "state",
                values_to = "pop1000")
-
-hist_pop_long2 <- hist_pop_long %>% 
-  mutate(pop = pop1000 * 1000)
 
 
 ### ----------- Joining tibbles ------------------
 joined_df <- yearly_count_state %>% 
   left_join(hist_pop_long, 
-            by=join_by(State, 
+            by=join_by(state, 
                        Year == DATE))
 
 joined_df
@@ -190,9 +187,9 @@ joined_df
 # 1. Use mutate() to calculate the rate of measles per 100,000 persons (remember population is given in 1000s).
 measles_yearly_rates <-
   joined_df %>% 
-  mutate(rate = (TotalCount / pop1000)* 1000)
+  mutate(rate = (TotalCount / pop1000)* 100)
 
 # 2. Join the states tibble to the measles_yearly rates tibble. What variable do you need to join on? 
 states_join <- measles_yearly_rates %>% 
-  left_join(states, by = join_by(State == name))
+  left_join(states, by = join_by(state == name))
 

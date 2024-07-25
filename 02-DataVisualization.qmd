@@ -8,7 +8,9 @@ knitr:
     
 ---
 ## Learning Objectives
-
+1. Become familiar with the components of a `ggplot2` graph (i.e. the grammar of graphics)
+1. Use best practices for different graph types
+1. Understand how to use visualizations to tell a data story
 
 ## Getting set up
 
@@ -56,8 +58,11 @@ region_summary <- read_csv("data/region_summary.csv")
 
 Visualization is an important process which can help us explore, understand, analyze, and communicate about data. Visualizations, including many kinds of graphs, charts, maps, animations, and infographics, can be far more effective at quickly communicating important points than raw numbers alone. But visualizations also have the power to mislead. And so throughout this class, we'll be covering some good data visualization practices. Slides accompanying this section can be found here: <https://osf.io/yk5bx>^[Slides created by the [Visualizing the Future project](https://visualizingthefuture.github.io/), made possible in part by the Institute of Museum and Library Services, RE-73-18-0059-18.]
 
+## The Data for This Lesson
 
-## Visualizing Data with ggplot2 
+In this lesson, we will continue to use the measles data we were working with in the Data Wrangling lesson. By the end of that lesson, we had joined our measles tibble with another tibble of population data. This enabled us to calculate the incidence rate of measles in each state and each year. We also combined that data with the states tibble so we could look at regional and division trends as well.
+
+## **`ggplot2`** Basics
 
 Next, we will learn about **`ggplot2`** - a tidyverse package for visualizing data. It is a powerful and flexible R package that allows you to create fully customizable, publication quality graphics. The `gg` in **`ggplot2`** stands for grammar of graphics. The grammar of graphics is the underlying philosophy of the package. It focuses on creating graphics in layers. Start with the data – map the data to the axes and to aesthetic qualities like size, shape, and color and geometries like dots, lines, and polygons. Further refine the appearance of your plot by adjusting scales and legends, labels, coordinate systems, and adding annotations.
 
@@ -100,7 +105,7 @@ region_summary %>%
 If you want the y axis to display something other than count, you need to make a couple of small adjustments. First - specify the `y` variable in the `aes()` function, and change the stat argument from it’s default of “count” to “identity” This tells it to base the y axis on the specified variable.
 
 
-### Setting vs mapping aesthetics
+## Setting vs mapping aesthetics
 When working with **`ggplot2`**, it's important to understand the difference between *setting* aesthetic properties and *mapping* them. All geoms have certain visual attributes that can be modified. Polygons like bars, have the properties fill and color. You can change the inside color of a bar with `fill`, and the border with `color`. We can modify the defaults with the `fill` and `color` arguments in the `geom_bar()` layer. (I've also increased the `linewidth` to make it easier to see the border color)
 
 ```{r}
@@ -116,7 +121,7 @@ region_summary %>%
 How did we know the color names "blue" and "purple" would work in the code above? R has 657 (!!) built in color names. You can see them by calling the function `colors()`. You can also specify colors using rgb and hexadecimal codes.
 :::
 
-Now we have manually set a value for the fill and color. To create our initial graph, we used the `mapping` argument and the `aes()` function to map the x axis to the `region`` variable. Watch what happens if we map the fill property to the `region` variable as well.
+Now we have manually set a value for the fill and color. To create our initial graph, we used the `mapping` argument and the `aes()` function to map the x axis to the `region` variable. Watch what happens if we map the fill property to the `region` variable as well.
 
 
 ```{r}
@@ -133,12 +138,14 @@ As we'll see later in this lesson, mapping a variable to an aesthetic will be es
 When you map an aesthetic with `aes()` in the `ggplot()` function it is inherited by all subsequent layers. When you map in a `geom_*()` function it is applied only to that layer.
 :::
 
+## Telling a data story
+
 Now let's start using ggplot2 to help us answer our research question - how did the introduction of the vaccine affect measles rates in the country? We'll do this with a line graph, which is useful for showing change over time.
 
 First, we need to use our `**dplyr**` skills to summarize the data.
 
 ```{r}
-yearly_rates_joined %>% 
+yearly_count <- yearly_rates_joined %>% 
   group_by(Year) %>% 
   summarize(TotalCount = sum(TotalCount))
 
@@ -147,59 +154,41 @@ yearly_rates_joined %>%
 We pipe to `ggplot()` and assign `Year` to the x-axis and `TotalCount` to the y-axis with the `aes()` function. The canvas and axes are ready. 
 
 ```{r}
-yearly_rates_joined %>% 
-  group_by(Year) %>% 
-  summarize(TotalCount = sum(TotalCount)) %>% 
+yearly_count %>% 
   ggplot(aes(x=Year, y=TotalCount))
 ```
 
 Now we can add a `geom` layer to add our line. Let's also be sure to save our work to an object. 
 
 ```{r}
-year_total_line <- yearly_rates_joined %>% 
-  group_by(Year) %>% 
-  summarize(TotalCount = sum(TotalCount)) %>% 
+yearly_count %>% 
   ggplot(aes(x=Year, y=TotalCount)) + 
   geom_line()
 
-year_total_line
 ```
 
 It might be nice to see where each data point falls on the line. To do this we can add another geometry layer.
 
 ```{r}
-year_total_line <- yearly_rates_joined %>% 
-  group_by(Year) %>% 
-  summarize(TotalCount = sum(TotalCount)) %>% 
+yearly_count %>% 
   ggplot(aes(x=Year, y=TotalCount)) + 
   geom_line() +
   geom_point()
 
-year_total_line
+
 ```
-
-::: {.shaded .tip data-latex=""}
-The `+` in the **`ggplot2`** package is particularly useful because it allows you to modify existing `ggplot` objects. This means you can easily set up plot templates and conveniently explore different types of plots, so the above plot can also be generated with code like this:
-
-`year_total_line <- year_total_line + geom_point()`
-
-:::
-
 
 There are many ways to customize your plot, like changing the color or line type, adding labels and annotations. One thing that would make our graph easier to read is tick marks at each decade on the x-axis. There are a number of functions in **`ggplot2`** for altering the scale. We want to alter the x-axis scale, which holds continuous data, so we can use the `scale_x_continuous()` function. Note that when you start to write the name of the function, RStudio will supply you with other similarly named functions. 
 
 `scale_x_continuous()` has an argument called `breaks` which allows you to alter where the axis tick marks occur. We can use that together with `seq()` to say put a tick mark every 10 places between 1900 and 2000.
 
 ```{r}
-year_total_line <- yearly_rates_joined %>% 
-  group_by(Year) %>% 
-  summarize(TotalCount = sum(TotalCount)) %>% 
+yearly_count  %>% 
   ggplot(aes(x=Year, y=TotalCount)) + 
   geom_line() +
   geom_point() + 
   scale_x_continuous(breaks = seq(from=1900, to=2000, by=10))
 
-year_total_line
 ```
 
 Now we can move beyond basic exploration and start to use our graph to analyze and tell stories about our data. One important trend we might notice, is the sharp decrease in cases in the 1960s. The measles vaccine was introduced in 1963. We can use our visualization to tell the story of the vaccine's impact. 
@@ -207,9 +196,7 @@ Now we can move beyond basic exploration and start to use our graph to analyze a
 Let's drop a reference line at 1963 to clearly indicate on the graph when the vaccine was introduced. To do this we add a `geom_vline()` and the `annotate()` function. There are multiple ways of adding lines and text to a plot, but these will serve us well for this case. Note that you can change features of lines such as color, type, and size. We can supply coordinates to `annotate()` to position the annotation where we want.
 
 ```{r}
-year_total_line <- yearly_rates_joined %>% 
-  group_by(Year) %>% 
-  summarize(TotalCount = sum(TotalCount)) %>% 
+yearly_count %>% 
   ggplot(aes(x=Year, y=TotalCount)) + 
   geom_line() +
   geom_point() + 
@@ -217,15 +204,11 @@ year_total_line <- yearly_rates_joined %>%
   geom_vline(xintercept = 1963, color = "red", linetype= "dashed") +
   annotate(geom = "label", x=1963, y=800000, label="1963: vaccine introduced")
 
-year_total_line
 ```
 Finally, let's add a title and axis labels to our plot with the `labs()` function. Note that axis labels will automatically be supplied from the column names, but you can use this function to override those defaults.
 
 ```{r}
-year_total_line <- 
-  yearly_rates_joined %>% 
-  group_by(Year) %>% 
-  summarize(TotalCount = sum(TotalCount)) %>% 
+yearly_count_line <- yearly_count %>% 
   ggplot(aes(x=Year, y=TotalCount)) + 
   geom_line() +
   geom_point() + 
@@ -234,28 +217,36 @@ year_total_line <-
   annotate(geom = "label", x=1963, y=800000, label="1963: vaccine introduced") +
   labs(title = "Measles Cases Decrease After Vaccine Introduced", x = "Year", y = "Total Measles Case Count")
 
-year_total_line
 ```
 
 Now, we have a pretty nice looking graph. Finally, let's save our plot to a png file, so we can share it or put it in reports. To do this we use the function called `ggsave()`.
 
 ```{r save plot, eval=FALSE, echo=TRUE}
-ggsave("figures/yearly_measles_count.png", plot = year_total_line)
+ggsave("figures/yearly_measles_count.png", plot = yearly_count_line)
 ```
 
-```{r}
-yearly_rates_joined %>% 
-  group_by(Year, region) %>% 
-  summarize(TotalCount = sum(TotalCount)) %>% 
-  ggplot(aes(x=Year, y=TotalCount, group=region, color=region)) + 
-  geom_line() +
-  scale_x_continuous(breaks = seq(from=1900, to=2000, by=10)) +
-  geom_vline(xintercept = 1963, color = "red", linetype= "dashed") +
-  annotate(geom = "label", x=1963, y=800000, label="1963: vaccine introduced") +
-  labs(title = "Measles Cases Decrease After Vaccine Introduced", x = "Year", y = "Total Measles Case Count")
-```
 
 ### Making Grouped Graphs
+
+If we have different groups in our data, we might want to use the graph to compare them. Let's create another line graph with a line for each region. Since the regions are different sizes, let's compare the average rate instead of the total count.
+
+First, let's summarize our data
+
+```{r}
+regional_rates <- yearly_rates_joined %>% 
+group_by(Year, region) %>% 
+summarize(avg_rate = mean(epi_rate, na.rm=TRUE))
+```
+
+
+```{r}
+regional_rates %>% 
+  ggplot(aes(x=Year, y=avg_rate, group=region, color=region)) + 
+  geom_line()
+  
+```
+
+
 
 ::: {.callout-note title="Working with color palettes"}
 
@@ -269,99 +260,101 @@ While **`ggplot`** comes with a default color palette, there are numerous other 
 
 :::
 
-Let’s try applying a viridis palette. viridis was designed to be especially robust for many forms of color-blindness. It is also meant to print well in grey scale. As an additional advantage, a lightweight form of the package is included with ggplot2, so there is no need to install additional packages.
+Let’s try applying a viridis palette. viridis was designed to be especially robust for many forms of color-blindness. It is also meant to print well in grey scale. 
 
-To do this, we need to change our function `scale_fill_discrete()` to `scale_viridis_d()`
+To do this, we need add another `scale_` function. This time `scale_color_viridis()`.
 
 
 ```{r}
-yearly_rates_joined %>% 
-  group_by(Year, region) %>% 
-  summarize(TotalCount = sum(TotalCount)) %>% 
-  ggplot(aes(x=Year, y=TotalCount, group=region, color=region)) + 
+regional_rates %>% 
+  ggplot(aes(x=Year, y=avg_rate, group=region, color=region)) + 
   geom_line(linewidth=1) +
-  scale_x_continuous(breaks = seq(from=1900, to=2000, by=10)) +
-  geom_vline(xintercept = 1963, color = "red", linetype= "dashed") +
-  annotate(geom = "label", x=1963, y=400000, label="1963: vaccine introduced") +
-  labs(title = "Measles Cases Decrease After Vaccine Introduced", x = "Year", y = "Total Measles Case Count") +
-  scale_color_viridis_d()
+  scale_color_viridis(discrete=TRUE)
 ```
 
+::: {.callout-note}
 Learn more from the [**`viridis`** documentation](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales)
+
+:::
+
+Let's adjust tick marks and add labels again
+
+```{r}
+regional_rates %>% 
+  ggplot(aes(x=Year, y=avg_rate, group=region, color=region)) + 
+  geom_line(linewidth=1) +
+  scale_color_viridis(discrete=TRUE)  +
+  scale_x_continuous(breaks = seq(from=1900, to=2000, by=10)) +
+  labs(x="", y= "Incidence Rate of measles \n per 100,000 persons", color="Region")
+```
 
 ### Changing the theme
 
 The theme of a **`ggplot2`** graph controls the overall look and all non-data elements of the plot. There are several built-in themes which can be applied as another layer. Start typing `theme_` in RStudio to see a list of themes. You can also use the `theme()` function to modify aspects of an existing theme. Here we apply `theme_classic()` which removes the grid lines and grey background of the default theme.
 
 ```{r}
-yearly_rates_joined %>% 
-  group_by(Year, region) %>% 
-  summarize(avg_rate = mean(epi_rate)) %>% 
+regional_rates %>% 
   ggplot(aes(x=Year, y=avg_rate, group=region, color=region)) + 
   geom_line(linewidth=1) +
+  scale_color_viridis(discrete=TRUE)  +
   scale_x_continuous(breaks = seq(from=1900, to=2000, by=10)) +
-  geom_vline(xintercept = 1963, color = "red", linetype= "dashed") +
-  annotate(geom = "label", x=1963, y=8000, label="1963: vaccine introduced") +
-  labs(title = "Measles Cases Decrease After Vaccine Introduced", x = "Year", y = "Total Measles Case Count") +
-  scale_color_viridis_d() +
-  theme_classic()
+  labs(title = "Measles Cases in the 20th Century", x="", y= "Average rate\nper 100,000", color="Region") +
+theme_classic()
+```
+
+In addition to setting an overall theme, we can tinker with individual elements of a theme with the `theme()` function. Check out the [`ggplot2` documentation](https://ggplot2.tidyverse.org/) for all the elements that can be adjusted.  Here we are going to make an adjustment to the y axis label. It's good practice to make as much of your text horizontal as possible for ease of reading.
+
+```{r}
+regional_rates %>% 
+  ggplot(aes(x=Year, y=avg_rate, group=region, color=region)) + 
+  geom_line(linewidth=1) +
+  scale_color_viridis(discrete=TRUE)  +
+  scale_x_continuous(breaks = seq(from=1900, to=2000, by=10)) +
+  labs(title = "Measles Cases in the 20th Century", x="", y= "Average rate\nper 100,000", color="Region") +
+  theme_classic() +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5, hjust = 0.5))
 ```
 
 ## Faceting and Small Multiples
 
-It can be difficult to understand a graph with too much data. Even just five lines 
+Even with the adjustments we made, it can be difficult to understand a graph with too much data. Even with just five lines it can be hard to see what's happening. A good practice is to break out each group into individual graphs called small multiples or facets.
 
 ```{r}
-yearly_rates_joined %>% 
-  group_by(Year, region) %>% 
-  summarize(avg_rate = mean(epi_rate)) %>% 
+regional_rates %>% 
   ggplot(aes(x=Year, y=avg_rate, group=region, color=region)) + 
   geom_line(linewidth=1) +
+  scale_color_viridis(discrete=TRUE)  +
   scale_x_continuous(breaks = seq(from=1900, to=2000, by=10)) +
-  geom_vline(xintercept = 1963, color = "red", linetype= "dashed") +
-  annotate(geom = "label", x=1963, y=8000, label="1963: vaccine introduced") +
-  labs(title = "Measles Cases Decrease After Vaccine Introduced", x = "Year", y = "Total Measles Case Count") +
-  scale_color_viridis_d() +
-  facet_wrap(~region, nrow=2) +
-  theme_classic()
+  labs(title = "Measles Cases in the 20th Century", x="", y= "Average rate\nper 100,000", color="Region") +
+  facet_wrap(~region, nrow=2) + 
+  theme_classic() +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5, hjust = 0.5))
 ```
 
-```{r}
-tmp <- yearly_rates_joined %>% 
-group_by(Year, region) %>% 
-summarize(avg_rate = mean(epi_rate)) %>% 
-mutate(region2=region) %>% 
-select(-region)
-```
-
-We could also use highlighting to do away with noise in a line graph. First create a new data frame.
-
-```{r}
-regional_rates <- yearly_rates_joined %>% filter(division=="South Atlantic" & between(Year, 1950, 1980))
-```
-
+::: {.callout-note collapse=true title="Highlighting"}
+We could also use highlighting to do away with noise in a line graph. 
 Then we can create two `geom_line` layers and highlight just the one in the facet.
 
 ```{r}
 
 tmp <- regional_rates %>%
-  mutate(State2=State)
+  mutate(region2=region)
 
 tmp %>%
-  ggplot(aes(x=Year, y=epi_rate)) +
-  geom_line(data=tmp %>% dplyr::select(-State), aes(group=State2), color="grey", linewidth=0.5, alpha=0.5) +
-  geom_line(aes(color=state), color="#69b3a2", linewidth=1.2 ) +
-  scale_x_continuous(breaks=seq(from=1950, to=1980, by=5)) +
+  ggplot(aes(x=Year, y=avg_rate)) +
+  geom_line(data=tmp %>% dplyr::select(-region), aes(group=region2), color="grey", linewidth=0.5, alpha=0.5) +
+  geom_line(aes(color=region), color="#69b3a2", linewidth=1.2 ) +
+  scale_x_continuous(breaks = seq(from=1900, to=2000, by=10)) +
  theme_minimal() +
   theme(
     legend.position="none",
     plot.title = element_text(size=14),
     panel.grid = element_blank()
   ) +
-  ggtitle("A comparison of measles cases in the South Atlantic Region") +
-  facet_wrap(~State, ncol = 2)
+  ggtitle("A comparison of measles cases by Region") +
+  facet_wrap(~region, ncol = 2)
 ```
-
+:::
 
 ## Maps
 While we were successful at creating a bar chart to compare measles rates in each state, it is often more helpful to use a map to visualize geographic data. There are multiple types of map-based visualizations in R and tools for creating them. While it is possible to make interactive and animated maps in R, in this lesson, we will only cover static maps.
@@ -400,8 +393,7 @@ Let's first create a data frame with just our 1963 data.
 
 ```{r}
 measles1963df <- yearly_rates_joined %>% 
-  filter(Year==1963) %>% 
-rename(state=State)
+  filter(Year==1963)
 ```
 
 Now let's plot our data with `plot_usmap()`. Remember it's important to use rate here rather than our raw count numbers since we are dealing with areas of vastly different populations.
@@ -409,15 +401,7 @@ Now let's plot our data with `plot_usmap()`. Remember it's important to use rate
 plot_usmap(data=measles1963df, values = "epi_rate")
 ```
 
-We are provided with a default color scheme, but we can adjust this. Before we do though, it's worth talking a little about some considerations for using color in visualizations. Color can make a huge difference to the effectiveness of your visualization, and it's important to think carefully about your choices. For example, in our default color palette, many of the shades are pretty dark, and it is hard to visually distinguish among them. When choosing a palette, you want to be sure shades can be easily distinguished from one another. Also, choose palettes that are color-blind friendly and would hold up well if you visualization was printed in greyscale.  
-
-
-```{r}
-library(viridis)
-```
-
-
-**`viridis`** is integrated with **`ggplot2`**, and our map is a `ggplot` object, we can call the function `scale_fill_viridis` and add it to our plot.
+Let's try with our `viridis` color palette.
 
 ```{r}
 plot_usmap(data=measles1963df, values = "epi_rate") +
@@ -445,7 +429,7 @@ Let's add a title, assign to an object, and save to a png file.
 ```{r eval=FALSE, echo=TRUE}
 map_1963 <- plot_usmap(data=measles1963df, values = "epi_rate") +
   scale_fill_viridis(option = "rocket", direction = -1) + 
-  labs(title = "Incidence Rate of Measles per 1000 people in 1963")
+  labs(title = "Incidence Rate of Measles per 100,000 people in 1963")
 
 ggsave(filename = "figures/map_1963.png", plot = map_1963, bg = "white")
 ```

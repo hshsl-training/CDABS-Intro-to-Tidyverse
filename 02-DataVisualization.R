@@ -1,9 +1,10 @@
 ##  ------ Installing and Loading Packages ------------------
 # install tidyverse if you haven't yet
-install.packages("tidyverse")
-install.packages("viridis")
-install.packages("usmap")
+# install.packages("tidyverse")
+# install.packages("viridis")
+# install.packages("usmap")
 
+library(tidyverse)
 library(viridis)
 library(usmap)
 
