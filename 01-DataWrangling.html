@@ -169,21 +169,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#vectors-and-data-frames-and-tibbles-oh-my" id="toc-vectors-and-data-frames-and-tibbles-oh-my" class="nav-link" data-scroll-target="#vectors-and-data-frames-and-tibbles-oh-my">Vectors and Data Frames and Tibbles oh my!</a></li>
   <li><a href="#base-r-functions-for-exploring-data" id="toc-base-r-functions-for-exploring-data" class="nav-link" data-scroll-target="#base-r-functions-for-exploring-data">Base R functions for exploring data</a></li>
   <li><a href="#tidyverse-functions-for-exploring-data" id="toc-tidyverse-functions-for-exploring-data" class="nav-link" data-scroll-target="#tidyverse-functions-for-exploring-data"><strong><code>tidyverse</code></strong> functions for exploring data</a></li>
+  <li><a href="#try-it-yourself" id="toc-try-it-yourself" class="nav-link" data-scroll-target="#try-it-yourself">Try it Yourself!</a></li>
   </ul></li>
   <li><a href="#subsetting-data-with-select-and-filter" id="toc-subsetting-data-with-select-and-filter" class="nav-link" data-scroll-target="#subsetting-data-with-select-and-filter">Subsetting data with <code>select()</code> and <code>filter()</code></a>
   <ul class="collapse">
   <li><a href="#select" id="toc-select" class="nav-link" data-scroll-target="#select"><code>select()</code></a></li>
   <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter"><code>filter()</code></a></li>
+  <li><a href="#try-it-yourself-1" id="toc-try-it-yourself-1" class="nav-link" data-scroll-target="#try-it-yourself-1">Try it Yourself</a></li>
   </ul></li>
   <li><a href="#changing-and-creating-variables-with-mutate" id="toc-changing-and-creating-variables-with-mutate" class="nav-link" data-scroll-target="#changing-and-creating-variables-with-mutate">Changing and creating variables with <code>mutate()</code></a></li>
   <li><a href="#grouping-and-summarizing" id="toc-grouping-and-summarizing" class="nav-link" data-scroll-target="#grouping-and-summarizing">Grouping and Summarizing</a></li>
   <li><a href="#sorting-datasets-with-arrange" id="toc-sorting-datasets-with-arrange" class="nav-link" data-scroll-target="#sorting-datasets-with-arrange">Sorting datasets with <code>arrange()</code></a></li>
-  <li><a href="#joining-datasets" id="toc-joining-datasets" class="nav-link" data-scroll-target="#joining-datasets">Joining Datasets</a>
-  <ul class="collapse">
+  <li><a href="#joining-datasets" id="toc-joining-datasets" class="nav-link" data-scroll-target="#joining-datasets">Joining Datasets</a></li>
   <li><a href="#long-vs-wide-formats" id="toc-long-vs-wide-formats" class="nav-link" data-scroll-target="#long-vs-wide-formats">Long vs Wide formats</a></li>
-  </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/edit/main/01-DataWrangling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://hshsl-training.github.io/cdabs-intro-to-tidyverse/edit/main/01-DataWrangling.qmd" class="toc-action"><i class="bi bi-git"></i>Edit this page</a></li><li><a href="https://hshsl-training.github.io/cdabs-intro-to-tidyverse/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -606,6 +606,9 @@ Make code flow with the pipe %&gt;%
 <p>In many tidyverse functions, the first argument is the name of the data frame you’re applying the function to. So when you use the pipe, you’ll generally start a line of code with the name of a tibble. One benefit you might notice right away, is that when we use the pipe, RStudio will supply the column names which helps to reduce typing and typos.</p>
 </div>
 </div>
+</section>
+<section id="try-it-yourself" class="level3">
+<h3 class="anchored" data-anchor-id="try-it-yourself">Try it Yourself!</h3>
 <div class="callout callout-style-default callout-tip callout-titled" title="CHALLENGE">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -623,6 +626,27 @@ CHALLENGE
 <li>Using <code>count()</code>, find out how many states are in each region.</li>
 <li>Using <code>count()</code>, find out how many states are in each region AND division. HINT: You can add additional column names to <code>distinct()</code> and <code>count()</code> to look at combinations of columns.</li>
 </ol>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><code>glimpse(states)</code></li>
+<li><code>states %&gt;% distinct(region)</code></li>
+<li><code>states %&gt;% count(region)</code></li>
+<li><code>states %&gt;% count(region, division)</code></li>
+</ol>
+</div>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -820,6 +844,9 @@ Warning
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PartOfCumulativeCountSeries<span class="sc">==</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Once again, we have fewer rows than we started with.</p>
+</section>
+<section id="try-it-yourself-1" class="level3">
+<h3 class="anchored" data-anchor-id="try-it-yourself-1">Try it Yourself</h3>
 <div class="callout callout-style-default callout-tip callout-titled" title="CHALLENGE">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -835,6 +862,26 @@ CHALLENGE
 <li>Use <code>filter()</code> to keep just the rows in the <code>South Atlantic</code> division of the <code>us_divisions</code> tibble. Assign this to an object called <code>sa_division</code>.</li>
 <li>Use <code>filter()</code> to keep just the rows in the <code>measles_non_cumulative</code> tibble where the <code>state</code> matches one of the states in the <code>name</code> column of the <code>sa_division</code> tibble and where the <code>CountValue</code> is greater than 1000. Assign this to an object called <code>measles_sa</code>.</li>
 </ol>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><code>us_divisions &lt;- states %&gt;% select(name, division)</code></li>
+<li><code>sa_division &lt;- us_divisions %&gt;% filter(division == "South Atlantic")</code></li>
+<li><code>measles_sa &lt;- measles_non_cumulative %&gt;% filter(state %in% sa_division$name &amp; CountValue &gt; 1000)</code></li>
+</ol>
+</div>
+</div>
+</div>
 </div>
 </div>
 <p>Now let’s do some more with our date variables.</p>
@@ -1021,8 +1068,9 @@ dbl (52): DATE, ALASKA, ALABAMA, ARKANSAS, ARIZONA, CALIFORNIA, COLORADO, CO...
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 </div>
-<section id="long-vs-wide-formats" class="level3">
-<h3 class="anchored" data-anchor-id="long-vs-wide-formats">Long vs Wide formats</h3>
+</section>
+<section id="long-vs-wide-formats" class="level2">
+<h2 class="anchored" data-anchor-id="long-vs-wide-formats">Long vs Wide formats</h2>
 <p>Remember that for data to be considered “tidy”, it should be in what is called “long” format. Each column is a variable, each row is an observation, and each cell is a value. Our state population data is in “wide” format, because State Name is being treated as a variable, when it is really a value. Wide data is often preferable for human-readability, but is less ideal for machine-readability. To be able to join this data to our measles dataset, it needs to have 3 columns - Year, State Name, and Population.</p>
 <p>We will use the package <strong><code>tidyr</code></strong> and the function <code>pivot_longer</code> to convert our population data to a long format, thus making it easier to join with our measles data.</p>
 <p>Each column in our population dataset represents a state. To make it tidy we are going to reduce those to one column called State with the state names as the values of the column. We will then need to create a new column for population containing the current cell values. To remember that the population data is provided in 1000s of persons, we will call this new column pop1000.</p>
@@ -1082,7 +1130,7 @@ CHALLENGE
 <li><p>Try joining <code>measles_yearly_rates</code> to <code>states</code>. What variable do you need to join by?</p></li>
 </ol>
 <div class="callout callout-style-default callout-tip no-icon callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1091,7 +1139,7 @@ Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. </span></span>
@@ -1111,7 +1159,6 @@ Solution
 <p>Now our data is ready to be visualized!</p>
 
 
-</section>
 </section>
 
 
@@ -1541,7 +1588,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/edit/main/01-DataWrangling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/hshsl-training/tidyverse-workshop-summer2024.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://hshsl-training.github.io/cdabs-intro-to-tidyverse/edit/main/01-DataWrangling.qmd" class="toc-action"><i class="bi bi-git"></i>Edit this page</a></li><li><a href="https://hshsl-training.github.io/cdabs-intro-to-tidyverse/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p><a href="https://creativecommons.org/licenses/by-sa/4.0/"><img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg" class="img-fluid" alt="CC BY" width="125"></a></p>
 </div>
