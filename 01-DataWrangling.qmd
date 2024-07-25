@@ -433,7 +433,6 @@ measles_us %>%
   count(Admin1Name)
 ```
 
-
 In many tidyverse functions, the first argument is the name of the data
 frame you're applying the function to. So when you use the pipe, you'll
 generally start a line of code with the name of a tibble. One
@@ -443,13 +442,23 @@ typos.
 
 :::
 
-::: {.callout-tip title="CHALLENGE"}
+### Try it Yourself!
+::: {.callout-tip title="CHALLENGE" }
+
 Now let's try exploring the `states` tibble in our environment
 
 1. Use `glimpse()` to inspect the columns and data types in the dataset.
 1. Use `distinct()` to find out the distinct values in the `region` column.
 1. Using `count()`, find out how many states are in each region. 
 1. Using `count()`, find out how many states are in each region AND division. HINT: You can add additional column names to `distinct()` and `count()` to look at combinations of columns.
+
+:::: {.callout-tip title="Solution" icon=false collapse="true"}
+1. `glimpse(states)`
+1. `states %>% distinct(region)`
+1. `states %>% count(region)`
+1. `states %>% count(region, division)`
+
+::::
 
 :::
 
@@ -595,11 +604,17 @@ measles_non_cumulative <-
 
 Once again, we have fewer rows than we started with. 
 
-
+### Try it Yourself
 :::{.callout-tip title="CHALLENGE"}
 1. Use `select()` to create a new tibble with just the `name` and `division` columns from the `states` tibble. Assign this to an object called `us_divisions`.
 2. Use `filter()` to keep just the rows in the `South Atlantic` division of the `us_divisions` tibble. Assign this to an object called `sa_division`.
 3. Use `filter()` to keep just the rows in the `measles_non_cumulative` tibble where the `state` matches one of the states in the `name` column of the `sa_division` tibble and where the `CountValue` is greater than 1000. Assign this to an object called `measles_sa`.
+
+:::: {.callout-tip title="Solution" icon=false collapse="true"}
+1. `us_divisions <- states %>% select(name, division)`
+1. `sa_division <- us_divisions %>% filter(division == "South Atlantic")`
+1. `measles_sa <- measles_non_cumulative %>% filter(state %in% sa_division$name & CountValue > 1000)`
+::::
 
 :::
 
@@ -710,7 +725,7 @@ hist_pop <-
 
 ```
 
-### Long vs Wide formats
+## Long vs Wide formats
 
 Remember that for data to be considered "tidy", it should be in what is called "long" format. Each column is a variable, each row is an observation, and each cell is a value. Our state population data is in "wide" format, because State Name is being treated as a variable, when it is really a value. Wide data is often preferable for human-readability, but is less ideal for machine-readability. To be able to join this data to our measles dataset, it needs to have 3 columns - Year, State Name, and Population. 
 
@@ -745,6 +760,7 @@ measles_joined<- yearly_count_state %>%
 
 measles_joined
 ```
+
 ::: {.callout-tip title="CHALLENGE"}
 1. Use `mutate()` to calculate the rate of measles per 100,000 persons (remember population is given in 1000s).
 

@@ -42,6 +42,22 @@ count(measles_us, Admin1Name)
 measles_us %>% 
   count(Admin1Name)
 
+### ----- Challenge ----
+# Exploring the `states` tibble in our environment
+
+# 1. Use `glimpse()` to inspect the columns and data types in the dataset.
+glimpse(states)
+
+# 2. Use `distinct()` to find out the distinct values in the `region` column.
+states %>% distinct(region)
+
+# 3. Using `count()`, find out how many states are in each region. 
+states %>% count(region)
+
+# 4. Using `count()`, find out how many states are in each region AND division. HINT: You can add additional column names to `distinct()` and `count()` to look at combinations of columns.
+states %>% count(region, division)
+
+
 ##  ------ Subsetting Data ------------------
 
 # create a tibble with just the Admin1Name and CountValue columns
@@ -107,6 +123,22 @@ measles_non_cumulative <-
 
 # Review columns in new tibble
 glimpse(measles_non_cumulative)
+
+
+### ----- Challenge ----
+# 1. Use `select()` to create a new tibble with just the `name` and `division` columns from the `states` tibble. Assign this to an object called `us_divisions`.
+us_divisions <- 
+  states %>% 
+  select(name, division)
+# 2. Use `filter()` to keep just the rows in the `South Atlantic` division of the `us_divisions` tibble. Assign this to an object called `sa_division`.
+sa_division <- 
+  us_divisions %>% 
+  filter(division == "South Atlantic")
+
+# 3. Use `filter()` to keep just the rows in the `measles_non_cumulative` tibble where the `state` matches one of the states in the `name` column of the `sa_division` tibble and where the `CountValue` is greater than 1000. Assign this to an object called `measles_sa`.
+measles_sa <- 
+  measles_non_cumulative %>% 
+  filter(state %in% sa_division$name & CountValue > 1000)
 
 ##  ------ Mutate ------------------
 

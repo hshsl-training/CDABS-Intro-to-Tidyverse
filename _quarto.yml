@@ -9,7 +9,7 @@ website:
   page-footer:
     right: |
       [![](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by.svg){fig-alt="CC BY" width=125px}](https://creativecommons.org/licenses/by-sa/4.0/)
-  repo-url: "https://github.com/hshsl-training/tidyverse-workshop-summer2024.git"
+  repo-url: "https://hshsl-training.github.io/cdabs-intro-to-tidyverse/"
   repo-actions: [edit, issue]
   navbar:
     background: "#c5251d"
