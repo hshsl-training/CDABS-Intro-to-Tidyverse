@@ -1097,7 +1097,7 @@ Solution
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. </span></span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>measles_yearly_rates <span class="ot">&lt;-</span></span>
 <span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  measles_joined <span class="sc">%&gt;%</span> </span>
-<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">epi_rate =</span> (TotalCount <span class="sc">/</span> pop1000)<span class="sc">*</span><span class="dv">1000</span>)</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">epi_rate =</span> (TotalCount <span class="sc">/</span> pop1000)<span class="sc">*</span><span class="dv">100</span>)</span>
 <span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. </span></span>
 <span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>yearly_rates_joined <span class="ot">&lt;-</span> measles_yearly_rates <span class="sc">%&gt;%</span> </span>
