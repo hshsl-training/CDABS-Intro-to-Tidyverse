@@ -225,8 +225,7 @@ Now, we have a pretty nice looking graph. Finally, let's save our plot to a png 
 ggsave("figures/yearly_measles_count.png", plot = yearly_count_line)
 ```
 
-
-### Making Grouped Graphs
+## Working with Three Variables
 
 If we have different groups in our data, we might want to use the graph to compare them. Let's create another line graph with a line for each region. Since the regions are different sizes, let's compare the average rate instead of the total count.
 
@@ -288,7 +287,7 @@ regional_rates %>%
   labs(x="", y= "Incidence Rate of measles \n per 100,000 persons", color="Region")
 ```
 
-### Changing the theme
+## Changing the theme
 
 The theme of a **`ggplot2`** graph controls the overall look and all non-data elements of the plot. There are several built-in themes which can be applied as another layer. Start typing `theme_` in RStudio to see a list of themes. You can also use the `theme()` function to modify aspects of an existing theme. Here we apply `theme_classic()` which removes the grid lines and grey background of the default theme.
 

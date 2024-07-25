@@ -64,39 +64,39 @@ measles_select <-
 )
 
 
-# rename Admin1Name column to State
+# rename Admin1Name column to state
 measles_select <-
   measles_select %>% 
-    rename(State = Admin1Name)
+    rename(state = Admin1Name)
 
 
-# filter tibble to include only rows where Maryland is the State
+# filter tibble to include only rows where Maryland is the state
 measles_md <- measles_select %>% 
-filter(State == "MARYLAND")
+filter(state == "MARYLAND")
 
 
 # filter tibble to include rows where state is MD and CountValue is greater than 500
 measles_select %>%
-  filter(State == "MARYLAND" & CountValue > 500)
+  filter(state == "MARYLAND" & CountValue > 500)
 
 
 
 
 # we would rather not have to write verbose code like this
 measles_select %>% 
-  filter(State == "MARYLAND" & State == "DELAWARE" & State == "Pennsylvania")
+  filter(state == "MARYLAND" & state == "DELAWARE" & state == "Pennsylvania")
 
 
 # filter to include rows that match the states$name vector of values (i.e. exclude territories)
 measles_states_only <-
   measles_select %>% 
-  filter(State %in% states$name)
+  filter(state %in% states$name)
 
 
 # this is an alternate way of of accomplishing above
 # the ! operator tells you to include everything that does not match the vector of values
 measles_states_only <- measles_select %>% 
-  filter(!State %in% c("PUERTO RICO", "GUAM", "AMERICAN SAMOA", "NORTHERN MARIANA ISLANDS", "VIRGIN ISLANDS, U.S.", "DISTRICT OF COLUMBIA"))
+  filter(!state %in% c("PUERTO RICO", "GUAM", "AMERICAN SAMOA", "NORTHERN MARIANA ISLANDS", "VIRGIN ISLANDS, U.S.", "DISTRICT OF COLUMBIA"))
 
 
 # this keeps only rows where the value is 0 in the PartofCumulativeCountSeries variable.
@@ -140,10 +140,10 @@ yearly_count <-
 
 yearly_count
 
-# group measles_year by Year and State, get counts of rows for each group
+# group measles_year by Year and state, get counts of rows for each group
 yearly_count_state <-
   measles_year %>%
-  group_by(Year, State) %>%
+  group_by(Year, state) %>%
   summarise(TotalCount = sum(CountValue))
 
 yearly_count_state
@@ -164,7 +164,7 @@ yearly_count_state %>%
 
 #import historical population data
 hist_pop <-
-  read_csv("data/Historical_Population_by_State.csv")
+  read_csv("data/Historical_Population_by_state.csv")
 
 # pivot state name columns to one column called state. Put the values from those columns in a column called pop100
 hist_pop_long <- hist_pop %>%
@@ -182,7 +182,7 @@ joined_df <- yearly_count_state %>%
 joined_df
 
 
-## ----- Practice! ----
+### ----- Challenge ----
 
 # 1. Use mutate() to calculate the rate of measles per 100,000 persons (remember population is given in 1000s).
 measles_yearly_rates <-
